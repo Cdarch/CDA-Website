@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>א.ח.ד אדריכלים | חיים דוד</title>
+  <meta name="description" content="א.ח.ד אדריכלים — משרד אדריכלות בראשות חיים דוד. תכנון ויצירת מבנים המשלבים אסתטיקה, פונקציונליות וחדשנות." />
+  <meta name="theme-color" content="#ffffff" />
+  <meta property="og:title" content="א.ח.ד אדריכלים" />
+  <meta property="og:description" content="משרד אדריכלות בראשות חיים דוד" />
+  <meta property="og:image" content="assets/logos/ahd-logo.jpeg" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/jpeg" href="assets/logos/ahd-logo.jpeg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a href="#main" class="skip-link">דלג לתוכן הראשי</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-bar">
+      <a href="#/" class="brand" aria-label="א.ח.ד אדריכלים — דף הבית">
+        <img src="assets/logos/ahd-logo.jpeg" alt="א.ח.ד אדריכלים" class="brand-logo" />
+        <span class="brand-text">א.ח.ד אדריכלים</span>
+      </a>
+
+      <nav class="nav-desktop" aria-label="ניווט ראשי">
+        <a href="#/" data-route="/">בית</a>
+        <a href="#/projects" data-route="/projects">פרויקטים</a>
+        <a href="#/about" data-route="/about">אודות</a>
+        <a href="#/contact" data-route="/contact">צור קשר</a>
+      </nav>
+
+      <button type="button" class="hamburger" id="hamburger" aria-expanded="false" aria-controls="nav-mobile" aria-label="פתיחת תפריט">
+        <svg viewBox="0 0 26 26" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M3 7h20" /><path d="M3 13h20" /><path d="M3 19h20" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="nav-mobile" id="nav-mobile" aria-label="ניווט נייד" hidden>
+      <a href="#/" data-route="/">בית</a>
+      <a href="#/projects" data-route="/projects">פרויקטים</a>
+      <a href="#/about" data-route="/about">אודות</a>
+      <a href="#/contact" data-route="/contact">צור קשר</a>
+    </nav>
+  </header>
+
+  <main id="main" class="site-main"></main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand brand-footer">
+          <img src="assets/logos/ahd-logo.jpeg" alt="" aria-hidden="true" class="brand-logo" />
+          <span class="brand-text">א.ח.ד אדריכלים</span>
+        </div>
+        <p class="footer-tag">משרד אדריכלות בראשות חיים דוד. תכנון מבנים המשלבים אסתטיקה, פונקציונליות וחדשנות.</p>
+      </div>
+      <div>
+        <h2 class="footer-h">ניווט</h2>
+        <ul class="footer-list">
+          <li><a href="#/">בית</a></li>
+          <li><a href="#/projects">פרויקטים</a></li>
+          <li><a href="#/about">אודות</a></li>
+          <li><a href="#/contact">צור קשר</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-h">יצירת קשר</h2>
+        <ul class="footer-list">
+          <li><a href="mailto:chaim.david.arc@gmail.com" dir="ltr">chaim.david.arc@gmail.com</a></li>
+          <li><a href="tel:+972503898979" dir="ltr">+972 50 389 89 79</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-row">
+        <p>© <span id="year"></span> א.ח.ד אדריכלים — כל הזכויות שמורות</p>
+        <p>חיים דוד · אדריכל מורשה</p>
+      </div>
+    </div>
+  </footer>
+
+  <button type="button" id="a11y-toggle" class="a11y-fab" aria-expanded="false" aria-controls="a11y-panel" aria-label="תפריט נגישות">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <circle cx="12" cy="4.5" r="1.6" fill="currentColor" />
+      <path d="M5 8.5h14" stroke-linecap="round" />
+      <path d="M12 8.5v5l-3.5 7M12 13.5l3.5 7" stroke-linecap="round" />
+    </svg>
+  </button>
+  <div id="a11y-panel" class="a11y-panel" role="dialog" aria-label="הגדרות נגישות" hidden>
+    <div class="a11y-head">
+      <h2>הגדרות נגישות</h2>
+      <button type="button" id="a11y-close" aria-label="סגירת תפריט נגישות">✕</button>
+    </div>
+    <div class="a11y-body">
+      <label class="a11y-row">
+        <span>ניגודיות גבוהה</span>
+        <button type="button" class="switch" data-pref="contrastHigh" role="switch" aria-checked="false"><span></span></button>
+      </label>
+      <div class="a11y-section">
+        <div class="a11y-label">גודל טקסט</div>
+        <div class="a11y-segments" data-pref="textSize">
+          <button type="button" data-value="normal" aria-pressed="true">רגיל</button>
+          <button type="button" data-value="larger" aria-pressed="false">גדול</button>
+          <button type="button" data-value="largest" aria-pressed="false">גדול מאוד</button>
+        </div>
+      </div>
+      <label class="a11y-row">
+        <span>הדגשת קישורים</span>
+        <button type="button" class="switch" data-pref="underlineLinks" role="switch" aria-checked="false"><span></span></button>
+      </label>
+      <label class="a11y-row">
+        <span>הפחתת אנימציה</span>
+        <button type="button" class="switch" data-pref="reduceMotion" role="switch" aria-checked="false"><span></span></button>
+      </label>
+      <button type="button" id="a11y-reset" class="a11y-reset">איפוס הגדרות</button>
+    </div>
+  </div>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="תצוגה מורחבת" hidden>
+    <button type="button" class="lb-close" id="lb-close" aria-label="סגירה">✕</button>
+    <button type="button" class="lb-prev" id="lb-prev" aria-label="תמונה קודמת">‹</button>
+    <button type="button" class="lb-next" id="lb-next" aria-label="תמונה הבאה">›</button>
+    <figure class="lb-figure">
+      <img id="lb-img" alt="" />
+      <figcaption id="lb-caption"></figcaption>
+    </figure>
+  </div>
+
+  <script src="projects.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

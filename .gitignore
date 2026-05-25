@@ -1,0 +1,16 @@
+# Internal React source — not deployed
+_react-source/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/
+
+# Build artifacts (in case anyone runs the React project)
+node_modules/
+dist/
+.cache/
