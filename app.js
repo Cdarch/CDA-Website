@@ -217,8 +217,19 @@
   // ---------- shared components (HTML strings) ----------
   function projectCardHTML(p, opts) {
     opts = opts || {};
+    if (opts.bare) {
+      const img = '<img src="' + escapeHtml(p.cover) + '" alt="' + escapeHtml(p.name) + '" loading="' + (opts.priority ? 'eager' : 'lazy') + '" />';
+      const overlay = opts.hoverTitle
+        ? '<span class="overlay overlay-title-only"><span class="o-title">' + escapeHtml(p.name) + '</span></span>'
+        : '';
+      const inner = img + overlay;
+      const frame = opts.linkToDetail
+        ? '<a class="image-frame" href="#/projects/' + escapeHtml(p.id) + '" aria-label="' + escapeHtml(p.name) + '">' + inner + '</a>'
+        : '<button type="button" class="image-frame" data-open-project="' + escapeHtml(p.id) + '" aria-label="פתיחת תמונה: ' + escapeHtml(p.name) + '">' + inner + '</button>';
+      return '<article class="project-card project-card-bare">' + frame + '</article>';
+    }
     const dev = p.developer ? '<p class="o-dev">יזם: ' + escapeHtml(p.developer) + '</p>' : '';
-    const devMeta = p.developer ? '<span class="dev">' + escapeHtml(p.developer) + '</span>' : '';
+    const devMeta = (p.developer && !opts.hideDev) ? '<span class="dev">' + escapeHtml(p.developer) + '</span>' : '';
     const delay = opts.delay ? ' delay-' + opts.delay : '';
     return (
       '<article class="project-card fade-up' + delay + '">' +
@@ -254,36 +265,23 @@
 
   // ---------- pages ----------
   function pageHome() {
-    const featured = FEATURED_IDS.map(findProject).filter(Boolean);
-    const cards = featured.map(function (p, i) {
-      return projectCardHTML(p, { priority: i < 3, delay: i < 3 ? 0 : 1 });
+    const reel = PROJECTS.concat(PROJECTS);
+    const cards = reel.map(function (p, i) {
+      return projectCardHTML(p, { priority: i < 3, bare: true });
     }).join('');
 
     return (
-      '<div class="fade-in">' +
-        '<section class="container hero">' +
-          '<div class="fade-up">' +
-            '<p class="eyebrow">A.H.D · א.ח.ד אדריכלים</p>' +
-            '<h1 class="h1">אדריכלות שמשלבת אסתטיקה,<br>פונקציונליות וחדשנות.</h1>' +
-          '</div>' +
-          '<div class="fade-up delay-1">' +
-            '<p class="lede">משרד האדריכלים של חיים דוד מתמחה בתכנון פרויקטים מורכבים — מהתחדשות עירונית ועד למגורים, מסחר ותעשייה.</p>' +
-            '<a href="#/projects" class="btn-link" style="margin-top:24px;">לכל הפרויקטים →</a>' +
+      '<div class="fade-in home-onescreen">' +
+        '<section class="hero-carousel-section">' +
+          '<div class="container">' +
+            '<div class="hero-carousel" id="hero-carousel">' + cards + '</div>' +
           '</div>' +
         '</section>' +
 
-        '<section class="container" style="padding-bottom:64px;">' +
-          '<div class="proj-grid">' + cards + '</div>' +
-        '</section>' +
-
-        trustedByHTML() +
-
-        '<section class="section section-divider">' +
-          '<div class="container cta-row">' +
-            '<h2 class="h2">יש לכם פרויקט בתכנון?<br>נשמח לשמוע עליו.</h2>' +
-            '<div>' +
-              '<p class="lede" style="margin:0 0 24px;">צרו איתנו קשר לשיחת היכרות. אנחנו מלווים את הפרויקט מהרעיון הראשוני ועד למימוש בשטח.</p>' +
-              '<a href="#/contact" class="btn">ליצירת קשר</a>' +
+        '<section class="hero-tagline-wrap">' +
+          '<div class="container">' +
+            '<div class="hero-tagline-inner">' +
+              '<h1 class="hero-tagline">אדריכלות שמשלבת אסתטיקה, פונקציונליות וחדשנות.</h1>' +
             '</div>' +
           '</div>' +
         '</section>' +
@@ -291,20 +289,19 @@
     );
   }
 
+  const PROJECTS_PAGE_SIZE = 6;
+
   function pageProjects() {
     const cards = PROJECTS.map(function (p, i) {
-      return projectCardHTML(p, { priority: i < 3, delay: i < 3 ? 0 : 1 });
+      return projectCardHTML(p, { priority: i < 6, bare: true, linkToDetail: true, hoverTitle: true });
     }).join('');
     return (
-      '<div class="fade-in">' +
-        '<section class="container" style="padding:56px 0 24px;">' +
-          '<p class="eyebrow">פרויקטים</p>' +
-          '<h1 class="h1">תיק עבודות</h1>' +
-          '<p class="lede" style="margin-top:16px;">אוסף הפרויקטים של המשרד — מבני מגורים, התחדשות עירונית ופרויקטים מסחריים. לחיצה על תמונה תפתח תצוגה מורחבת.</p>' +
-        '</section>' +
-        '<section class="container" style="padding-bottom:80px;">' +
-          '<div class="proj-grid">' + cards + '</div>' +
-        '</section>' +
+      '<div class="fade-in projects-fixed">' +
+        '<div class="container projects-narrow">' +
+          '<div class="projects-viewport">' +
+            '<div class="proj-grid" id="proj-grid" data-page="0">' + cards + '</div>' +
+          '</div>' +
+        '</div>' +
       '</div>'
     );
   }
@@ -475,6 +472,11 @@
     }
 
     main.innerHTML = html;
+    const isHome = path === '/' || path === '';
+    const isProjects = path === '/projects';
+    main.classList.toggle('main-home', isHome);
+    document.body.classList.toggle('hide-footer', isHome || isProjects);
+    document.body.classList.toggle('page-fixed', isProjects);
     document.title = title;
 
     // Close mobile nav on navigation
@@ -492,7 +494,102 @@
     window.scrollTo(0, 0);
   }
 
+  function initHeroCarousel() {
+    const car = document.getElementById('hero-carousel');
+    if (!car) return;
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SPEED = 0.55; // px per frame — steady rightward drift
+    let paused = false;
+    let dragging = false, startX = 0, startScroll = 0;
+    let pos = 0; // tracked scroll position; avoids reading scrollLeft back every frame
+    let half = car.scrollWidth / 2;
+    window.addEventListener('resize', function () { half = car.scrollWidth / 2; });
+
+    function step() {
+      if (!paused && !dragging) {
+        pos -= SPEED;
+        if (Math.abs(pos) >= half) pos += half;
+        car.scrollLeft = pos;
+      }
+      requestAnimationFrame(step);
+    }
+    if (!reduceMotion) requestAnimationFrame(step);
+
+    car.addEventListener('pointerenter', function () { paused = true; });
+    car.addEventListener('pointerleave', function () { paused = false; });
+
+    car.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        pos -= e.deltaY;
+        car.scrollLeft = pos;
+      }
+    }, { passive: false });
+
+    car.addEventListener('pointerdown', function (e) {
+      dragging = true;
+      startX = e.clientX;
+      startScroll = pos;
+      car.setPointerCapture(e.pointerId);
+    });
+    car.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      pos = startScroll + (e.clientX - startX);
+      car.scrollLeft = pos;
+    });
+    ['pointerup', 'pointercancel'].forEach(function (ev) {
+      car.addEventListener(ev, function () { dragging = false; });
+    });
+  }
+
+  function initProjectsPager() {
+    const grid = document.getElementById('proj-grid');
+    if (!grid) return;
+
+    const pageCount = Math.ceil(PROJECTS.length / PROJECTS_PAGE_SIZE);
+    let page = 0;
+    let busy = false;
+
+    function goTo(next) {
+      if (next < 0 || next >= pageCount || next === page || busy) return;
+      busy = true;
+      page = next;
+      grid.setAttribute('data-page', String(page));
+      grid.style.transform = 'translateY(' + (-page * (100 / pageCount)) + '%)';
+      setTimeout(function () { busy = false; }, 650);
+    }
+
+    grid.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      if (e.deltaY > 10) goTo(page + 1);
+      else if (e.deltaY < -10) goTo(page - 1);
+    }, { passive: false });
+
+    let touchStartY = null;
+    grid.addEventListener('touchstart', function (e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    grid.addEventListener('touchend', function (e) {
+      if (touchStartY == null) return;
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 40) goTo(dy > 0 ? page + 1 : page - 1);
+      touchStartY = null;
+    });
+  }
+
+  function syncHeaderHeightVar() {
+    const header = document.getElementById('site-header');
+    if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', syncHeaderHeightVar);
+
   function wirePageInteractions() {
+    syncHeaderHeightVar();
+    initHeroCarousel();
+    initProjectsPager();
+
     // Project cards (cover image opens lightbox of all images of that project)
     main.querySelectorAll('[data-open-project]').forEach(function (btn) {
       btn.addEventListener('click', function () {
