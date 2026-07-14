@@ -260,21 +260,28 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 @media (min-width: 1200px) { .projects-narrow { padding-left: 120px; padding-right: 120px; } }
 
 /* ===== Project grid — fixed 3x2 paginated frame =====
-   Heights are set in px via JS (initProjectsPager's syncHeight) rather
-   than CSS %/vh chains — more predictable across browsers than relying
-   on flex stretch propagating through nested containers. */
+   Sized with 100vh-based calc() directly (not nested %/flex-stretch,
+   and not a JS-measured px snapshot) so it stays correct across
+   browser zoom levels — vh recomputes natively, no resize listener
+   needed for it. --projects-vpad must match the padding below. */
 body.page-fixed { overflow: hidden; }
 
 .projects-fixed {
+  --projects-vpad: 56px; /* 28px top + 28px bottom */
   box-sizing: border-box;
   padding: 28px 0;
 }
 .projects-fixed .container { width: 100%; }
 
-.projects-viewport { width: 100%; overflow: hidden; }
+.projects-viewport {
+  width: 100%;
+  overflow: hidden;
+  height: calc(100vh - var(--header-h, 80px) - var(--projects-vpad, 56px));
+}
 
 .proj-grid {
   width: 100%;
+  height: calc((100vh - var(--header-h, 80px) - var(--projects-vpad, 56px)) * 2);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -284,12 +291,18 @@ body.page-fixed { overflow: hidden; }
 }
 @media (min-width: 900px) { .proj-grid { gap: 16px; } }
 
-.proj-grid .project-card { height: 100%; }
+/* min-height:0 overrides the grid item's default min-height:auto, which
+   otherwise keeps a row from shrinking below its image's natural size
+   and forces other rows to unevenly compensate. */
+.proj-grid .project-card { height: 100%; min-height: 0; min-width: 0; }
 .proj-grid .project-card .image-frame {
   aspect-ratio: unset;
   width: 100%;
   height: 100%;
+  min-height: 0;
+  min-width: 0;
 }
+.proj-grid .project-card .image-frame img { min-height: 0; min-width: 0; }
 
 .project-card { position: relative; }
 .project-card .image-frame {
