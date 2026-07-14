@@ -439,7 +439,17 @@ body.page-fixed { overflow: hidden; }
   min-height: 0;
 }
 @media (min-width: 1024px) { .detail-fixed .detail-grid { grid-template-columns: 8fr 4fr; gap: 40px; } }
-.detail-fixed .detail-grid > aside { min-height: 0; height: 100%; }
+.detail-fixed .detail-grid > aside {
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* fixed px, not % — vertical-padding percentages resolve against the
+     containing block's WIDTH per spec, not its height */
+  padding-bottom: 64px;
+}
 
 .detail-grid {
   display: grid;
@@ -463,7 +473,7 @@ body.page-fixed { overflow: hidden; }
 }
 .pgallery-item {
   flex: 0 0 auto;
-  height: calc(100% - 56px);
+  height: calc(100% - 90px);
   min-height: 0;
 }
 .pgallery-stack.single-image .pgallery-item { height: 100%; }
@@ -489,24 +499,29 @@ body.page-fixed { overflow: hidden; }
   padding: 28px;
   box-sizing: border-box;
 }
-.detail-fixed .facts-card {
-  height: 100%;
-  overflow-y: auto;
-}
+.detail-fixed .facts-card { max-height: 100%; overflow-y: auto; }
 @media (min-width: 768px) { .facts-card { padding: 32px; } }
-.facts-card h2 { font-size: 11px; letter-spacing: 0.3em; color: var(--muted); margin: 0 0 20px; font-weight: 400; }
+
+.fc-title { font-size: clamp(19px, 1.8vw, 25px); font-weight: 400; line-height: 1.25; margin: 0 0 6px; }
+.fc-meta { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 22px; }
+
 .facts-list { list-style: none; padding: 0; margin: 0; }
 .facts-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 14px;
+  position: relative;
+  padding-inline-start: 14px;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--ink);
 }
-.facts-list li:last-child { border-bottom: 0; }
-.facts-list dt { color: var(--muted); }
-.facts-list dd { margin: 0; text-align: left; }
+.facts-list li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.6em;
+  width: 1px;
+  height: 0.8em;
+  background: var(--muted);
+}
 .note {
   margin-top: 24px;
   font-size: 12px;

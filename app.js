@@ -318,19 +318,19 @@
     }
     const facts = [
       ['יזם', p.developer],
-      ['סוג פרויקט', p.type],
-      ['סטטוס', p.status],
       ['בניינים', p.buildings],
       ['יחידות', p.units],
       ['קומות', p.floors],
       ['מרתפי חניה', p.parking],
       ['שטח', p.area],
-      ['מיקום', p.location],
     ].filter(function (kv) { return kv[1]; });
 
     const factsHTML = facts.map(function (kv) {
-      return '<li><dt>' + escapeHtml(kv[0]) + '</dt><dd>' + escapeHtml(kv[1]) + '</dd></li>';
+      return '<li>' + escapeHtml(kv[0]) + ': ' + escapeHtml(kv[1]) + '</li>';
     }).join('');
+
+    const metaLine = [p.type, p.status].filter(Boolean).join(' · ');
+    const titleLine = escapeHtml(p.name) + (p.location ? ', ' + escapeHtml(p.location) : '');
 
     const galleryHTML = p.images.map(function (src, i) {
       return (
@@ -346,13 +346,14 @@
 
     return (
       '<div class="fade-in detail-fixed" data-detail="' + escapeHtml(p.id) + '">' +
-        '<div class="container">' +
+        '<div class="container projects-narrow">' +
           '<div class="detail-grid">' +
             '<div class="pgallery-viewport">' +
               '<div class="pgallery-stack' + (p.images.length <= 1 ? ' single-image' : '') + '" id="pgallery-stack" data-count="' + p.images.length + '">' + galleryHTML + '</div>' +
             '</div>' +
             '<aside><div class="facts-card">' +
-              '<h2>' + escapeHtml(p.name) + '</h2>' +
+              '<h2 class="fc-title">' + titleLine + '</h2>' +
+              (metaLine ? '<p class="fc-meta">' + escapeHtml(metaLine) + '</p>' : '') +
               '<ul class="facts-list">' + factsHTML + '</ul>' +
               note +
             '</div></aside>' +
