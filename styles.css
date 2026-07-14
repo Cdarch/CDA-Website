@@ -438,17 +438,14 @@ body.page-fixed { overflow: hidden; }
   height: calc(100vh - var(--header-h, 80px) - 56px);
   min-height: 0;
 }
-@media (min-width: 1024px) { .detail-fixed .detail-grid { grid-template-columns: 8fr 4fr; gap: 40px; } }
+@media (min-width: 1024px) { .detail-fixed .detail-grid { grid-template-columns: minmax(0, 1fr) 240px; gap: 40px; } }
 .detail-fixed .detail-grid > aside {
   min-height: 0;
   height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  /* fixed px, not % — vertical-padding percentages resolve against the
-     containing block's WIDTH per spec, not its height */
-  padding-bottom: 64px;
+  justify-content: flex-start;
 }
 
 .detail-grid {
@@ -495,12 +492,10 @@ body.page-fixed { overflow: hidden; }
 .pgallery-item .image-frame:hover img { transform: scale(1.05); }
 
 .facts-card {
-  border: 1px solid var(--line);
-  padding: 28px;
+  padding: 0;
   box-sizing: border-box;
 }
 .detail-fixed .facts-card { max-height: 100%; overflow-y: auto; }
-@media (min-width: 768px) { .facts-card { padding: 32px; } }
 
 .fc-title { font-size: clamp(19px, 1.8vw, 25px); font-weight: 400; line-height: 1.25; margin: 0 0 6px; }
 .fc-title .fc-num { font-size: 0.82em; }
