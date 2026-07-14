@@ -29,6 +29,8 @@ window.PROJECTS = [
     floors: '10 קומות',
     parking: '3 מרתפי חניה',
     area: '13,500 מ"ר',
+    status: 'בתכנון',
+    note: 'תוכנן והוגש תחת אתגר נול אדריכלים',
     cover: 'assets/projects/yehuda-hanasi-1.jpg',
     images: [
       'assets/projects/yehuda-hanasi-1.jpg',

@@ -318,19 +318,25 @@
     }
     const facts = [
       ['יזם', p.developer],
-      ['בניינים', p.buildings],
-      ['יחידות', p.units],
+      ['מספר יחידות דיור', p.units],
       ['קומות', p.floors],
       ['מרתפי חניה', p.parking],
-      ['שטח', p.area],
+      ['שטח המגרש', p.plotArea || '000'],
+      ['היקף הפרויקט', p.area],
     ].filter(function (kv) { return kv[1]; });
 
     const factsHTML = facts.map(function (kv) {
       return '<li>' + escapeHtml(kv[0]) + ': ' + escapeHtml(kv[1]) + '</li>';
     }).join('');
 
-    const metaLine = [p.type, p.status].filter(Boolean).join(' · ');
-    const titleLine = escapeHtml(p.name) + (p.location ? ', ' + escapeHtml(p.location) : '');
+    const metaLine = [p.type, p.status || 'בתכנון'].filter(Boolean).join(' · ');
+
+    function balanceNumerals(str) {
+      return escapeHtml(str).replace(/[0-9]+(?:-[0-9]+)?/g, function (m) {
+        return '<span class="fc-num">' + m + '</span>';
+      });
+    }
+    const titleLine = balanceNumerals(p.name) + (p.location ? ', ' + balanceNumerals(p.location) : '');
 
     const galleryHTML = p.images.map(function (src, i) {
       return (

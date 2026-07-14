@@ -473,7 +473,7 @@ body.page-fixed { overflow: hidden; }
 }
 .pgallery-item {
   flex: 0 0 auto;
-  height: calc(100% - 90px);
+  height: calc(100% - 32px);
   min-height: 0;
 }
 .pgallery-stack.single-image .pgallery-item { height: 100%; }
@@ -503,6 +503,7 @@ body.page-fixed { overflow: hidden; }
 @media (min-width: 768px) { .facts-card { padding: 32px; } }
 
 .fc-title { font-size: clamp(19px, 1.8vw, 25px); font-weight: 400; line-height: 1.25; margin: 0 0 6px; }
+.fc-title .fc-num { font-size: 0.82em; }
 .fc-meta { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 22px; }
 
 .facts-list { list-style: none; padding: 0; margin: 0; }
