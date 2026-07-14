@@ -444,7 +444,6 @@ body.page-fixed { overflow: hidden; }
    (base .container padding), while the image keeps the wider right-side
    margin shared with the projects grid (.projects-narrow's own value). */
 .detail-fixed .container.projects-narrow { padding-left: 20px; }
-@media (min-width: 768px) { .detail-fixed .container.projects-narrow { padding-left: 40px; } }
 
 .detail-grid {
   display: grid;
