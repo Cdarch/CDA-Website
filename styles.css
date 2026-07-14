@@ -426,32 +426,72 @@ body.page-fixed { overflow: hidden; }
 .prose strong { font-weight: 600; }
 .prose-divider { border-top: 1px solid var(--line); margin: 48px 0 32px; }
 
-/* ===== Project detail ===== */
+/* ===== Project detail — fixed single-screen with a peeking image stack =====
+   Same approach as the projects grid: 100vh-based calc (zoom-safe) +
+   min-height:0 everywhere a grid/flex item holds an image (otherwise the
+   image's intrinsic size overrides the row's assigned height). */
+.detail-fixed {
+  box-sizing: border-box;
+  padding: 28px 0;
+}
+.detail-fixed .detail-grid {
+  height: calc(100vh - var(--header-h, 80px) - 56px);
+  min-height: 0;
+}
+@media (min-width: 1024px) { .detail-fixed .detail-grid { grid-template-columns: 8fr 4fr; gap: 40px; } }
+.detail-fixed .detail-grid > aside { min-height: 0; height: 100%; }
+
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
 }
-@media (min-width: 1024px) { .detail-grid { grid-template-columns: 8fr 4fr; gap: 40px; } }
 
-.gallery {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+.pgallery-viewport {
+  overflow: hidden;
+  height: 100%;
+  min-height: 0;
 }
-@media (min-width: 640px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
-.gallery .image-frame { aspect-ratio: 4 / 3; cursor: zoom-in; border: 0; padding: 0; background: var(--soft); overflow: hidden; }
-.gallery .image-frame img {
-  width: 100%; height: 100%; object-fit: cover;
+.pgallery-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  transition: transform .6s cubic-bezier(0.65, 0, 0.35, 1);
+  transform: translateY(0);
+}
+.pgallery-item {
+  flex: 0 0 auto;
+  height: calc(100% - 56px);
+  min-height: 0;
+}
+.pgallery-stack.single-image .pgallery-item { height: 100%; }
+.pgallery-item .image-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  cursor: zoom-in;
+  border: 0;
+  padding: 0;
+  background: var(--soft);
+  overflow: hidden;
+}
+.pgallery-item .image-frame img {
+  width: 100%; height: 100%; object-fit: cover; min-height: 0;
   transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.gallery .image-frame:hover img { transform: scale(1.05); }
+.pgallery-item .image-frame:hover img { transform: scale(1.05); }
 
 .facts-card {
   border: 1px solid var(--line);
   padding: 28px;
-  position: sticky;
-  top: 96px;
+  box-sizing: border-box;
+}
+.detail-fixed .facts-card {
+  height: 100%;
+  overflow-y: auto;
 }
 @media (min-width: 768px) { .facts-card { padding: 32px; } }
 .facts-card h2 { font-size: 11px; letter-spacing: 0.3em; color: var(--muted); margin: 0 0 20px; font-weight: 400; }
@@ -473,14 +513,6 @@ body.page-fixed { overflow: hidden; }
   color: var(--muted);
   line-height: 1.7;
 }
-.back-link {
-  display: inline-block;
-  font-size: 11px;
-  letter-spacing: 0.25em;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-.back-link:hover { color: var(--ink); }
 
 /* ===== Contact ===== */
 .contact-grid {

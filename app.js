@@ -334,32 +334,30 @@
 
     const galleryHTML = p.images.map(function (src, i) {
       return (
-        '<button type="button" class="image-frame" data-open-gallery="' + i + '" aria-label="תמונה ' + (i + 1) + ' של ' + escapeHtml(p.name) + '">' +
-          '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(p.name) + ' – תמונה ' + (i + 1) + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />' +
-        '</button>'
+        '<div class="pgallery-item">' +
+          '<button type="button" class="image-frame" data-open-gallery="' + i + '" aria-label="תמונה ' + (i + 1) + ' של ' + escapeHtml(p.name) + '">' +
+            '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(p.name) + ' – תמונה ' + (i + 1) + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />' +
+          '</button>' +
+        '</div>'
       );
     }).join('');
 
     const note = p.note ? '<p class="note">* ' + escapeHtml(p.note) + '</p>' : '';
-    const loc = p.location ? '<p class="muted" style="margin-top:8px;">' + escapeHtml(p.location) + '</p>' : '';
 
     return (
-      '<div class="fade-in" data-detail="' + escapeHtml(p.id) + '">' +
-        '<section class="container" style="padding:56px 0 24px;">' +
-          '<a href="#/projects" class="back-link">← חזרה לפרויקטים</a>' +
-          '<h1 class="h1" style="margin-top:16px;">' + escapeHtml(p.name) + '</h1>' +
-          loc +
-        '</section>' +
-        '<section class="container" style="padding-bottom:48px;">' +
+      '<div class="fade-in detail-fixed" data-detail="' + escapeHtml(p.id) + '">' +
+        '<div class="container">' +
           '<div class="detail-grid">' +
-            '<div><div class="gallery">' + galleryHTML + '</div></div>' +
+            '<div class="pgallery-viewport">' +
+              '<div class="pgallery-stack' + (p.images.length <= 1 ? ' single-image' : '') + '" id="pgallery-stack" data-count="' + p.images.length + '">' + galleryHTML + '</div>' +
+            '</div>' +
             '<aside><div class="facts-card">' +
-              '<h2>פרטי הפרויקט</h2>' +
+              '<h2>' + escapeHtml(p.name) + '</h2>' +
               '<ul class="facts-list">' + factsHTML + '</ul>' +
               note +
             '</div></aside>' +
           '</div>' +
-        '</section>' +
+        '</div>' +
       '</div>'
     );
   }
@@ -474,9 +472,10 @@
     main.innerHTML = html;
     const isHome = path === '/' || path === '';
     const isProjects = path === '/projects';
+    const isProjectDetail = path.indexOf('/projects/') === 0;
     main.classList.toggle('main-home', isHome);
-    document.body.classList.toggle('hide-footer', isHome || isProjects);
-    document.body.classList.toggle('page-fixed', isProjects);
+    document.body.classList.toggle('hide-footer', isHome || isProjects || isProjectDetail);
+    document.body.classList.toggle('page-fixed', isProjects || isProjectDetail);
     document.title = title;
 
     // Close mobile nav on navigation
@@ -589,10 +588,49 @@
   }
   window.addEventListener('resize', syncHeaderHeightVar);
 
+  function initDetailGalleryPager() {
+    const stack = document.getElementById('pgallery-stack');
+    if (!stack) return;
+
+    const count = parseInt(stack.getAttribute('data-count'), 10) || 1;
+    let index = 0;
+    let busy = false;
+
+    function goTo(next) {
+      if (next < 0 || next >= count || next === index || busy) return;
+      busy = true;
+      index = next;
+      // Measured live (not cached) so this stays correct across browser zoom levels.
+      const itemRect = stack.children[0].getBoundingClientRect();
+      const gap = parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 0;
+      stack.style.transform = 'translateY(' + (-index * (itemRect.height + gap)) + 'px)';
+      setTimeout(function () { busy = false; }, 650);
+    }
+
+    stack.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      if (e.deltaY > 10) goTo(index + 1);
+      else if (e.deltaY < -10) goTo(index - 1);
+    }, { passive: false });
+
+    let touchStartY = null;
+    stack.addEventListener('touchstart', function (e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    stack.addEventListener('touchend', function (e) {
+      if (touchStartY == null) return;
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 40) goTo(dy > 0 ? index + 1 : index - 1);
+      touchStartY = null;
+    });
+  }
+
   function wirePageInteractions() {
     syncHeaderHeightVar();
     initHeroCarousel();
     initProjectsPager();
+    initDetailGalleryPager();
 
     // Project cards (cover image opens lightbox of all images of that project)
     main.querySelectorAll('[data-open-project]').forEach(function (btn) {
