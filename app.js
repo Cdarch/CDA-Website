@@ -545,18 +545,35 @@
 
   function initProjectsPager() {
     const grid = document.getElementById('proj-grid');
-    if (!grid) return;
+    const viewport = document.querySelector('.projects-viewport');
+    if (!grid || !viewport) return;
 
     const pageCount = Math.ceil(PROJECTS.length / PROJECTS_PAGE_SIZE);
     let page = 0;
     let busy = false;
+    let viewportPx = 0;
+
+    function syncHeight() {
+      const header = document.getElementById('site-header');
+      const wrap = document.querySelector('.projects-fixed');
+      const headerH = header ? header.offsetHeight : 0;
+      const wrapStyles = wrap ? getComputedStyle(wrap) : null;
+      const vPadding = wrapStyles ? (parseFloat(wrapStyles.paddingTop) + parseFloat(wrapStyles.paddingBottom)) : 0;
+      viewportPx = Math.max(200, window.innerHeight - headerH - vPadding);
+      viewport.style.height = viewportPx + 'px';
+      grid.style.height = (viewportPx * pageCount) + 'px';
+      grid.style.transform = 'translateY(' + (-page * viewportPx) + 'px)';
+    }
+
+    syncHeight();
+    window.addEventListener('resize', syncHeight);
 
     function goTo(next) {
       if (next < 0 || next >= pageCount || next === page || busy) return;
       busy = true;
       page = next;
       grid.setAttribute('data-page', String(page));
-      grid.style.transform = 'translateY(' + (-page * (100 / pageCount)) + '%)';
+      grid.style.transform = 'translateY(' + (-page * viewportPx) + 'px)';
       setTimeout(function () { busy = false; }, 650);
     }
 
