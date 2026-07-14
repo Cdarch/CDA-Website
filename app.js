@@ -319,8 +319,6 @@
     const facts = [
       ['יזם', p.developer],
       ['מספר יחידות דיור', p.units],
-      ['קומות', p.floors],
-      ['מרתפי חניה', p.parking],
       ['שטח המגרש', p.plotArea || '000'],
       ['היקף הפרויקט', p.area],
     ].filter(function (kv) { return kv[1]; });
