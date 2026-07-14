@@ -186,8 +186,19 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 }
 
 /* ===== Hero carousel (home) ===== */
+@media (min-width: 768px) {
+  .home-onescreen {
+    height: calc(100vh - var(--header-h, 80px));
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .hero-carousel-section { padding: 20px 0; }
-@media (min-width: 768px) { .hero-carousel-section { padding: 28px 0; } }
+@media (min-width: 768px) {
+  .hero-carousel-section { padding: 28px 0; flex: 1 1 auto; min-height: 0; display: flex; }
+  .hero-carousel-section .container { display: flex; width: 100%; }
+}
 
 .hero-carousel {
   display: flex;
@@ -208,9 +219,22 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 .hero-carousel .project-card .image-frame { cursor: pointer; }
 .project-card-bare .image-frame { cursor: pointer; }
 @media (min-width: 640px) { .hero-carousel .project-card { width: 48%; } }
-@media (min-width: 1024px) { .hero-carousel { gap: 24px; } .hero-carousel .project-card { width: 32%; } }
 
-.hero-tagline-wrap { padding: 0; }
+/* Desktop: fill the available vertical space — cards size from height, not a fixed width */
+@media (min-width: 768px) {
+  .hero-carousel { height: 100%; gap: 24px; }
+  .hero-carousel .project-card {
+    width: auto;
+    height: 100%;
+  }
+  .hero-carousel .project-card .image-frame {
+    width: auto;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.hero-tagline-wrap { padding: 0; flex: 0 0 auto; }
 .hero-tagline-inner {
   padding: 8px 0;
   border-top: 1px solid var(--line);
