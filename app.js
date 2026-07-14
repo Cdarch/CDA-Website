@@ -340,7 +340,10 @@
       return (
         '<div class="pgallery-item">' +
           '<button type="button" class="image-frame" data-open-gallery="' + i + '" aria-label="תמונה ' + (i + 1) + ' של ' + escapeHtml(p.name) + '">' +
-            '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(p.name) + ' – תמונה ' + (i + 1) + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />' +
+            /* eager for all: lazy-loaded images sit far outside the viewport in
+               this peeking stack, and browsers defer their layout box (aspect-ratio
+               computes to 0x0) until they're fetched, breaking the slide math */
+            '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(p.name) + ' – תמונה ' + (i + 1) + '" loading="eager" />' +
           '</button>' +
         '</div>'
       );
