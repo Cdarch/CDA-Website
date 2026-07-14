@@ -598,11 +598,22 @@
 
   function initDetailGalleryPager() {
     const stack = document.getElementById('pgallery-stack');
-    if (!stack) return;
+    const viewport = document.querySelector('.pgallery-viewport');
+    if (!stack || !viewport) return;
 
     const count = parseInt(stack.getAttribute('data-count'), 10) || 1;
     let index = 0;
     let busy = false;
+
+    // Viewport height = one frame's rendered height (from its own width via the
+    // 5:3 aspect-ratio) + the peek amount — kept in sync with the stack's gap.
+    function syncViewportHeight() {
+      const PEEK = 48;
+      const w = viewport.getBoundingClientRect().width;
+      viewport.style.height = Math.round((w * 3 / 5) + PEEK) + 'px';
+    }
+    syncViewportHeight();
+    window.addEventListener('resize', syncViewportHeight);
 
     function goTo(next) {
       if (next < 0 || next >= count || next === index || busy) return;
