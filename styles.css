@@ -191,12 +191,13 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
     height: calc(100vh - var(--header-h, 80px));
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
   }
 }
 
 .hero-carousel-section { padding: 20px 0; }
 @media (min-width: 768px) {
-  .hero-carousel-section { padding: 28px 0; flex: 1 1 auto; min-height: 0; display: flex; }
+  .hero-carousel-section { padding: 0; flex: 0 0 auto; display: flex; }
   .hero-carousel-section .container { display: flex; width: 100%; }
 }
 
@@ -220,9 +221,10 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 .project-card-bare .image-frame { cursor: pointer; }
 @media (min-width: 640px) { .hero-carousel .project-card { width: 48%; } }
 
-/* Desktop: fill the available vertical space — cards size from height, not a fixed width */
+/* Desktop: size cards from a fixed share of viewport height, not a fixed width —
+   leaves equal breathing room above/below (handled by space-evenly on .home-onescreen) */
 @media (min-width: 768px) {
-  .hero-carousel { height: 100%; gap: 24px; }
+  .hero-carousel { height: 62vh; gap: 24px; }
   .hero-carousel .project-card {
     width: auto;
     height: 100%;
