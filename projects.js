@@ -93,7 +93,7 @@ window.PROJECTS = [
     parking: '2 מרתפי חניה',
     area: '4,300 מ"ר',
     cover: 'assets/projects/onkelos-13.jpg',
-    images: ['assets/projects/onkelos-13.jpg'],
+    images: ['assets/projects/onkelos-13.jpg', 'assets/projects/onkelos-13-2.jpg'],
   },
   {
     id: 'weizmann-105',
