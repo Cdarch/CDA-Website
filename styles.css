@@ -466,10 +466,15 @@ body.page-fixed { overflow: hidden; }
   transition: transform .6s cubic-bezier(0.65, 0, 0.35, 1);
   transform: translateY(0);
 }
-.pgallery-item { flex: 0 0 auto; }
+.pgallery-item { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 100%; }
 .pgallery-item .image-frame {
   display: block;
-  width: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  /* max-height set in JS from available viewport height — without it, a
+     portrait photo stretched to the column's full width becomes taller
+     than the screen at 100% zoom. */
   aspect-ratio: 3 / 2; /* fallback until JS sets this per-image from its real dimensions */
   cursor: zoom-in;
   border: 0;
