@@ -470,7 +470,7 @@ body.page-fixed { overflow: hidden; }
 .pgallery-item .image-frame {
   display: block;
   width: 100%;
-  aspect-ratio: 5 / 3; /* matches the renders' native ~1.67:1 ratio */
+  aspect-ratio: 3 / 2; /* fallback until JS sets this per-image from its real dimensions */
   cursor: zoom-in;
   border: 0;
   padding: 0;

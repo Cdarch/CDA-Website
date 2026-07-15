@@ -349,7 +349,7 @@
       );
     }).join('');
 
-    const note = p.note ? '<p class="note">* ' + escapeHtml(p.note) + '</p>' : '';
+    const note = '<p class="note">* ' + escapeHtml(p.note || 'תוכנן והוגש תחת אתגר נול אדריכלים') + '</p>';
 
     return (
       '<div class="fade-in detail-fixed" data-detail="' + escapeHtml(p.id) + '">' +
@@ -608,13 +608,34 @@
     const items = stack.querySelectorAll('.pgallery-item');
     if (items[0]) items[0].classList.add('is-current');
 
-    // Viewport height = one frame's rendered height (from its own width via the
-    // 5:3 aspect-ratio) + the peek amount — kept in sync with the stack's gap.
+    // Projects' photos vary a lot in orientation (portrait, square, wide
+    // landscape) — a single hardcoded ratio produced gray bars for anything
+    // that wasn't ~5:3. Each frame gets its own ratio from its own image
+    // once it loads, instead.
+    stack.querySelectorAll('.image-frame').forEach(function (frame) {
+      const img = frame.querySelector('img');
+      if (!img) return;
+      function applyRatio() {
+        if (img.naturalWidth && img.naturalHeight) {
+          frame.style.aspectRatio = img.naturalWidth + ' / ' + img.naturalHeight;
+          syncViewportHeight();
+        }
+      }
+      if (img.complete) applyRatio();
+      else img.addEventListener('load', applyRatio);
+    });
+
+    // Viewport height = the first frame's rendered height (from its own width
+    // via its own aspect-ratio) + the peek amount — kept in sync with the
+    // stack's gap.
     function syncViewportHeight() {
       const GAP = 48; // must match .pgallery-stack's gap
       const PEEK = 30; // actual pixels of the next image's top that should show
+      const firstFrame = stack.querySelector('.image-frame');
       const w = viewport.getBoundingClientRect().width;
-      viewport.style.height = Math.round((w * 3 / 5) + GAP + PEEK) + 'px';
+      const fr = firstFrame ? firstFrame.getBoundingClientRect() : null;
+      const ratio = (fr && fr.width) ? (fr.width / fr.height) : (5 / 3);
+      viewport.style.height = Math.round((w / ratio) + GAP + PEEK) + 'px';
     }
     syncViewportHeight();
     window.addEventListener('resize', syncViewportHeight);
