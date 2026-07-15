@@ -618,7 +618,7 @@
     function applyMaxFrameHeight() {
       const header = document.getElementById('site-header');
       const headerH = header ? header.offsetHeight : 80;
-      const maxH = Math.round((window.innerHeight - headerH) * 0.6);
+      const maxH = Math.round((window.innerHeight - headerH) * 0.68);
       stack.querySelectorAll('.image-frame').forEach(function (frame) {
         frame.style.maxHeight = maxH + 'px';
       });
