@@ -605,6 +605,9 @@
     let index = 0;
     let busy = false;
 
+    const items = stack.querySelectorAll('.pgallery-item');
+    if (items[0]) items[0].classList.add('is-current');
+
     // Viewport height = one frame's rendered height (from its own width via the
     // 5:3 aspect-ratio) + the peek amount — kept in sync with the stack's gap.
     function syncViewportHeight() {
@@ -619,7 +622,9 @@
     function goTo(next) {
       if (next < 0 || next >= count || next === index || busy) return;
       busy = true;
+      if (items[index]) items[index].classList.remove('is-current');
       index = next;
+      if (items[index]) items[index].classList.add('is-current');
       // Measured live (not cached) so this stays correct across browser zoom levels.
       const itemRect = stack.children[0].getBoundingClientRect();
       const gap = parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 0;
