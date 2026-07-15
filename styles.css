@@ -438,12 +438,19 @@ body.page-fixed { overflow: hidden; }
   padding: 28px 0;
 }
 .detail-fixed .detail-grid { align-items: end; }
-@media (min-width: 1024px) { .detail-fixed .detail-grid { grid-template-columns: minmax(0, 1fr) 240px; gap: 40px; } }
+@media (min-width: 1024px) { .detail-fixed .detail-grid { grid-template-columns: minmax(0, 1fr) 190px; gap: 40px; } }
 
-/* Left edge of the text column should match the header nav's own edge
-   (base .container padding), while the image keeps the wider right-side
-   margin shared with the projects grid (.projects-narrow's own value). */
+/* Left edge must match the header nav's own left padding (base .container:
+   20px / 40px at 768+), NOT .projects-narrow's much wider symmetric value
+   meant for the image's right-side margin. */
 .detail-fixed .container.projects-narrow { padding-left: 20px; }
+@media (min-width: 768px) { .detail-fixed .container.projects-narrow { padding-left: 40px; } }
+
+/* Left edge of the text column: the column is sized to its widest line's
+   own natural width (190px, not a round fixed number) so that line's
+   text — not just the box — actually touches the left edge, matching
+   the header nav's edge via the same shared .container centering (no
+   left-padding override needed: both use the same base container). */
 
 .detail-grid {
   display: grid;
@@ -455,7 +462,7 @@ body.page-fixed { overflow: hidden; }
 .pgallery-stack {
   display: flex;
   flex-direction: column;
-  gap: 48px; /* also the amount of the next image that peeks in below */
+  gap: 12px; /* empty space only — the peek itself is actual image content, added in JS */
   transition: transform .6s cubic-bezier(0.65, 0, 0.35, 1);
   transform: translateY(0);
 }
