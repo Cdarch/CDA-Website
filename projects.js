@@ -47,11 +47,11 @@ window.PROJECTS = [
     floors: '9-10 קומות',
     parking: '3.5 מרתפי חניה',
     area: '14,900 מ"ר',
-    cover: 'assets/projects/einstein-19-1.jpg',
+    cover: 'assets/projects/einstein-19-3.jpg',
     images: [
+      'assets/projects/einstein-19-3.jpg',
       'assets/projects/einstein-19-1.jpg',
       'assets/projects/einstein-19-2.jpg',
-      'assets/projects/einstein-19-3.jpg',
     ],
   },
   {
