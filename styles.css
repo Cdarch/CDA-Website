@@ -462,7 +462,7 @@ body.page-fixed { overflow: hidden; }
 .pgallery-stack {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* empty space only — the peek itself is actual image content, added in JS */
+  gap: 48px; /* empty space only — the peek itself is actual image content, added in JS */
   transition: transform .6s cubic-bezier(0.65, 0, 0.35, 1);
   transform: translateY(0);
 }
