@@ -609,7 +609,7 @@
     // 5:3 aspect-ratio) + the peek amount — kept in sync with the stack's gap.
     function syncViewportHeight() {
       const GAP = 12; // must match .pgallery-stack's gap
-      const PEEK = 48; // actual pixels of the next image's top that should show
+      const PEEK = 30; // actual pixels of the next image's top that should show
       const w = viewport.getBoundingClientRect().width;
       viewport.style.height = Math.round((w * 3 / 5) + GAP + PEEK) + 'px';
     }
