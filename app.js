@@ -267,7 +267,9 @@
   function pageHome() {
     const reel = PROJECTS.concat(PROJECTS);
     const cards = reel.map(function (p, i) {
-      return projectCardHTML(p, { priority: i < 3, bare: true });
+      // Eager for all: lazy images far along this auto-scrolling reel keep their
+      // aspect-ratio fallback (wrong ratio, cropped) until they happen to load.
+      return projectCardHTML(p, { priority: true, bare: true });
     }).join('');
 
     return (
@@ -512,6 +514,22 @@
     let pos = 0; // tracked scroll position; avoids reading scrollLeft back every frame
     let half = car.scrollWidth / 2;
     window.addEventListener('resize', function () { half = car.scrollWidth / 2; });
+
+    // Projects mix portrait and landscape photos — a fixed 4:3 frame cropped
+    // portrait ones badly. Give each card its own ratio from its own image
+    // once it loads (same fix as the project-detail gallery).
+    car.querySelectorAll('.image-frame').forEach(function (frame) {
+      const img = frame.querySelector('img');
+      if (!img) return;
+      function applyRatio() {
+        if (img.naturalWidth && img.naturalHeight) {
+          frame.style.aspectRatio = img.naturalWidth + ' / ' + img.naturalHeight;
+          half = car.scrollWidth / 2;
+        }
+      }
+      if (img.complete) applyRatio();
+      else img.addEventListener('load', applyRatio);
+    });
 
     function step() {
       if (!paused && !dragging) {
