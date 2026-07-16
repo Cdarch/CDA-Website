@@ -7,10 +7,11 @@
 //   location  - מיקום (אופציונלי, למשל "תל אביב")
 //   developer - שם היזם
 //   buildings - מספר בניינים (אופציונלי)
-//   units     - יח"ד
+//   units     - מספר יחידות הדיור (רק המספר, בלי "יח"ד" — התווית כבר כוללת את זה)
 //   floors    - קומות
 //   parking   - מרתפי חניה
-//   area      - שטח במ"ר
+//   area      - היקף הפרויקט במ"ר
+//   plotArea  - שטח המגרש במ"ר (אופציונלי; אם חסר, יוצג "000" זמנית)
 //   type      - סוג פרויקט (אופציונלי, למשל "תמ"א חיזוק")
 //   status    - סטטוס (אופציונלי, "בתכנון" / "בביצוע" / "הושלם")
 //   note      - הערה תחתונה (אופציונלי)
@@ -20,12 +21,58 @@
 // ===========================================================================
 window.PROJECTS = [
   {
+    id: 'arba-aratzot-23',
+    name: 'ארבע ארצות 23',
+    location: '',
+    developer: 'ורד תשובה',
+    type: 'תמ"א חיזוק',
+    units: '13',
+    floors: '6 קומות',
+    parking: 'מרתף חניה רובוטי',
+    area: '1,600 מ"ר',
+    cover: 'assets/projects/arba-aratzot-23-front.jpg',
+    images: [
+      'assets/projects/arba-aratzot-23-front.jpg',
+      'assets/projects/arba-aratzot-23-back.jpg',
+    ],
+  },
+  {
+    id: 'arba-aratzot-25',
+    name: 'ארבע ארצות 25',
+    location: '',
+    developer: 'ורד תשובה',
+    type: 'תמ"א חיזוק',
+    units: '17',
+    floors: '6 קומות',
+    parking: 'מרתף חניה רובוטי',
+    area: '1,800 מ"ר',
+    cover: 'assets/projects/arba-aratzot-25-front.jpg',
+    images: [
+      'assets/projects/arba-aratzot-25-front.jpg',
+      'assets/projects/arba-aratzot-25-back.jpg',
+    ],
+  },
+  {
+    id: 'luba-eliav-4',
+    name: 'לובה אליאב 4',
+    location: '',
+    developer: 'בעלי קרקע - חן ואיתי גינדי',
+    units: '21',
+    plotArea: '1,165 מ"ר',
+    area: '5,800 מ"ר',
+    cover: 'assets/projects/luba-eliav-1.jpg',
+    images: [
+      'assets/projects/luba-eliav-1.jpg',
+      'assets/projects/luba-eliav-2.jpg',
+    ],
+  },
+  {
     id: "yehuda-hanasi",
     name: 'יהודה הנשיא 9-11',
     location: '',
     developer: 'שלום את נתן',
     buildings: '2 בניינים',
-    units: '72 יח"ד',
+    units: '72',
     floors: '10 קומות',
     parking: '3 מרתפי חניה',
     area: '13,500 מ"ר',
@@ -43,7 +90,7 @@ window.PROJECTS = [
     location: '',
     developer: 'שלום את נתן – אזורים',
     buildings: '2 בניינים',
-    units: '78 יח"ד',
+    units: '78',
     floors: '9-10 קומות',
     parking: '3.5 מרתפי חניה',
     area: '14,900 מ"ר',
@@ -59,7 +106,7 @@ window.PROJECTS = [
     name: 'איינשטיין 21-27',
     location: '',
     developer: 'אבן דרך - שיכון ובינוי',
-    units: '67 יח"ד',
+    units: '67',
     floors: '9 קומות',
     parking: '3 מרתפי חניה',
     area: '13,300 מ"ר',
@@ -72,7 +119,7 @@ window.PROJECTS = [
     location: '',
     developer: 'אקרו נדל"ן – יובלים',
     buildings: '3 בניינים',
-    units: '107 יח"ד',
+    units: '107',
     floors: '10 קומות',
     parking: '3 מרתפי חניה',
     area: '21,000 מ"ר',
@@ -88,7 +135,7 @@ window.PROJECTS = [
     name: 'אונקלוס 13',
     location: '',
     developer: 'ינושבסקי בע"מ',
-    units: '28 יח"ד',
+    units: '28',
     floors: '8 קומות',
     parking: '2 מרתפי חניה',
     area: '4,300 מ"ר',
@@ -100,7 +147,7 @@ window.PROJECTS = [
     name: 'ויצמן 105',
     location: '',
     developer: 'ינושבסקי',
-    units: '21 יח"ד',
+    units: '21',
     floors: '9 קומות',
     parking: '3 מרתפי חניה',
     area: '3,600 מ"ר',
@@ -112,7 +159,7 @@ window.PROJECTS = [
     name: 'פייבל 6',
     location: '',
     developer: 'ינושבסקי',
-    units: '16 יח"ד',
+    units: '16',
     floors: '8 קומות',
     parking: '2 מרתפי חניה',
     area: '3,400 מ"ר',
@@ -120,44 +167,12 @@ window.PROJECTS = [
     images: ['assets/projects/feivel-6.jpg'],
   },
   {
-    id: 'arba-aratzot-23',
-    name: 'ארבע ארצות 23',
-    location: '',
-    developer: 'ורד תשובה',
-    type: 'תמ"א חיזוק',
-    units: '13 יח"ד',
-    floors: '6 קומות',
-    parking: 'מרתף חניה רובוטי',
-    area: '1,600 מ"ר',
-    cover: 'assets/projects/arba-aratzot-23-front.jpg',
-    images: [
-      'assets/projects/arba-aratzot-23-front.jpg',
-      'assets/projects/arba-aratzot-23-back.jpg',
-    ],
-  },
-  {
-    id: 'arba-aratzot-25',
-    name: 'ארבע ארצות 25',
-    location: '',
-    developer: 'ורד תשובה',
-    type: 'תמ"א חיזוק',
-    units: '17 יח"ד',
-    floors: '6 קומות',
-    parking: 'מרתף חניה רובוטי',
-    area: '1,800 מ"ר',
-    cover: 'assets/projects/arba-aratzot-25-front.jpg',
-    images: [
-      'assets/projects/arba-aratzot-25-front.jpg',
-      'assets/projects/arba-aratzot-25-back.jpg',
-    ],
-  },
-  {
     id: 'zhabotinsky-40-42',
     name: 'ז\'בוטינסקי 40-42',
     location: 'תל אביב',
     developer: 'קבוצת גבאי',
     status: 'בביצוע',
-    units: '29 יח"ד',
+    units: '29',
     floors: '7 קומות',
     parking: '2 מרתפי חניה',
     area: '3,627 מ"ר',
@@ -171,7 +186,7 @@ window.PROJECTS = [
     location: 'תל אביב',
     developer: 'רון משולמי',
     status: 'בתכנון',
-    units: '22 יח"ד',
+    units: '22',
     floors: '8 קומות',
     parking: '3 מרתפי חניה',
     area: '2,900 מ"ר',
