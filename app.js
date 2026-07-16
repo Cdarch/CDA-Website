@@ -721,11 +721,36 @@
     });
   }
 
+  function positionDetailNav() {
+    const next = document.querySelector('.detail-nav-next');
+    const prev = document.querySelector('.detail-nav-prev');
+    if (!next || !prev) return;
+    const vw = window.innerWidth;
+    const about = document.querySelector('.nav-desktop a[data-route="/about"]');
+    const logo = document.querySelector('.brand-logo');
+
+    if (about && about.getBoundingClientRect().width > 0) {
+      const ar = about.getBoundingClientRect();
+      next.style.left = Math.round((ar.left + ar.right) / 2 - 22) + 'px';
+    } else {
+      next.style.left = ''; // falls back to the CSS default edge offset
+    }
+
+    if (logo && logo.getBoundingClientRect().width > 0) {
+      const lr = logo.getBoundingClientRect();
+      prev.style.right = Math.round(vw - lr.left - 22) + 'px';
+    } else {
+      prev.style.right = '';
+    }
+  }
+  window.addEventListener('resize', positionDetailNav);
+
   function wirePageInteractions() {
     syncHeaderHeightVar();
     initHeroCarousel();
     initProjectsPager();
     initDetailGalleryPager();
+    positionDetailNav();
 
     // Project cards (cover image opens lightbox of all images of that project)
     main.querySelectorAll('[data-open-project]').forEach(function (btn) {

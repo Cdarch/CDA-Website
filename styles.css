@@ -525,7 +525,7 @@ body.page-fixed { overflow: hidden; }
 
 .detail-nav {
   position: fixed;
-  top: 50%;
+  top: 33%;
   transform: translateY(-50%);
   z-index: 30;
   display: flex;
