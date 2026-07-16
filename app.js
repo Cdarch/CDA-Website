@@ -351,7 +351,10 @@
       );
     }).join('');
 
-    const note = '<p class="note">* ' + escapeHtml(p.note || 'תוכנן והוגש תחת אתגר נול אדריכלים') + '</p>';
+    // No note field at all -> show the default credit line. An explicit empty
+    // string ('') means "deliberately no note" (used by the newer projects).
+    const noteText = p.note === undefined ? 'תוכנן והוגש תחת אתגר נול אדריכלים' : p.note;
+    const note = noteText ? '<p class="note">* ' + escapeHtml(noteText) + '</p>' : '';
 
     return (
       '<div class="fade-in detail-fixed" data-detail="' + escapeHtml(p.id) + '">' +
