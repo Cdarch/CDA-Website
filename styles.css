@@ -533,7 +533,7 @@ body.page-fixed { overflow: hidden; }
   justify-content: center;
   width: 44px;
   height: 44px;
-  color: var(--line);
+  color: var(--muted); /* var(--line) was too close to white to actually see */
   transition: color .25s;
 }
 .detail-nav:hover, .detail-nav:focus-visible { color: var(--ink); }
