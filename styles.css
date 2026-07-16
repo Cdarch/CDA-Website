@@ -523,6 +523,24 @@ body.page-fixed { overflow: hidden; }
   line-height: 1.7;
 }
 
+.detail-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--line);
+  transition: color .25s;
+}
+.detail-nav:hover, .detail-nav:focus-visible { color: var(--ink); }
+.detail-nav-next { left: 16px; }
+.detail-nav-prev { right: 16px; }
+@media (min-width: 768px) { .detail-nav-next { left: 28px; } .detail-nav-prev { right: 28px; } }
+
 /* ===== Contact ===== */
 .contact-grid {
   display: grid;

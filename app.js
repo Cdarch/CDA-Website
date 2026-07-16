@@ -356,8 +356,23 @@
     const noteText = p.note === undefined ? 'תוכנן והוגש תחת אתגר נול אדריכלים' : p.note;
     const note = noteText ? '<p class="note">* ' + escapeHtml(noteText) + '</p>' : '';
 
+    // Prev/next follow the same order as the projects grid (RTL reading order:
+    // forward = left). Wraps around at either end.
+    const idx = PROJECTS.findIndex(function (x) { return x.id === p.id; });
+    const nextP = PROJECTS[(idx + 1) % PROJECTS.length];
+    const prevP = PROJECTS[(idx - 1 + PROJECTS.length) % PROJECTS.length];
+    const chevron = function (dir) {
+      const d = dir === 'left' ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6';
+      return '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>';
+    };
+    const detailNav = (
+      '<a class="detail-nav detail-nav-next" href="#/projects/' + escapeHtml(nextP.id) + '" aria-label="הפרויקט הבא: ' + escapeHtml(nextP.name) + '">' + chevron('left') + '</a>' +
+      '<a class="detail-nav detail-nav-prev" href="#/projects/' + escapeHtml(prevP.id) + '" aria-label="הפרויקט הקודם: ' + escapeHtml(prevP.name) + '">' + chevron('right') + '</a>'
+    );
+
     return (
       '<div class="fade-in detail-fixed" data-detail="' + escapeHtml(p.id) + '">' +
+        (PROJECTS.length > 1 ? detailNav : '') +
         '<div class="container projects-narrow">' +
           '<div class="detail-grid">' +
             '<div class="pgallery-viewport">' +
