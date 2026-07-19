@@ -738,7 +738,7 @@
 
     if (logo && logo.getBoundingClientRect().width > 0) {
       const lr = logo.getBoundingClientRect();
-      prev.style.right = Math.round(vw - lr.left - 22) + 'px';
+      prev.style.right = Math.round(vw - lr.right - 22) + 'px';
     } else {
       prev.style.right = '';
     }
