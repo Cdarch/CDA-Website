@@ -211,6 +211,7 @@ window.CLIENTS = [
   { name: 'ינושבסקי', logo: 'assets/clients/yanushevski.jpeg' },
   { name: 'יובלים', logo: 'assets/clients/yuvalim.jpeg' },
   { name: 'אקרו נדל"ן', logo: 'assets/clients/akro.jpeg' },
+  { name: 'גינדי', logo: 'assets/clients/GINDI.jpg' },
 ];
 
 window.FEATURED_IDS = [
