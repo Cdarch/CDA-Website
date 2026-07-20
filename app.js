@@ -393,22 +393,21 @@
   function pageAbout() {
     return (
       '<div class="fade-in">' +
-        '<section class="container" style="padding:56px 20px 32px; max-width:880px;">' +
-          '<p class="eyebrow">אודות</p>' +
-          '<h1 class="h1">המשרד פועל מתוך אמונה<br>שאדריכלות איכותית נוצרת<br>במפגש שבין חזון, עיצוב מדויק<br>והבנה עסקית מעמיקה.</h1>' +
+        '<section class="container" style="padding:18px 20px 4px; max-width:880px;">' +
+          '<h1 class="h1 h1-sm">המשרד פועל מתוך אמונה<br>שאדריכלות איכותית נוצרת<br>במפגש שבין חזון, עיצוב מדויק<br>והבנה עסקית מעמיקה.</h1>' +
         '</section>' +
 
-        '<section class="container" style="padding:0 20px 32px; max-width:880px;">' +
+        '<section class="container" style="padding:0 20px 4px; max-width:880px;">' +
           '<div class="prose">' +
             '<p>המשרד, שנוסד על ידי האדריכל חיים דוד, מתמחה בתכנון מבנים המשלבים אסתטיקה, פונקציונליות וחדשנות — ממגורים פרטיים ועד פרויקטים מסחריים, תעשייתיים וציבוריים. אנו מספקים גם שירותי ניהול BIM ותיאום מערכות.</p>' +
             '<p>אנו מלווים יזמים, חברות בנייה ולקוחות פרטיים לאורך כל שלבי הפרויקט — מהרעיון הראשוני, דרך תכנון ורישוי, ועד למימוש בשטח — תוך מיצוי זכויות הבנייה והענקת ערך תכנוני, כלכלי ואסתטי אמיתי.</p>' +
           '</div>' +
         '</section>' +
 
-        '<section class="container" style="padding:0 20px 64px; max-width:880px;">' +
+        '<section class="container" style="padding:0 20px 14px; max-width:880px;">' +
           '<div class="prose-divider"></div>' +
           '<div class="prose">' +
-            '<p class="eyebrow" style="margin-bottom:16px;">על האדריכל</p>' +
+            '<p class="eyebrow" style="margin-bottom:10px;">על האדריכל</p>' +
             '<p>האדריכל <strong>חיים דוד</strong> בעל ניסיון של למעלה מ־11 שנה בתכנון והובלת פרויקטים מורכבים. טרם הקמת המשרד שימש כאדריכל וראש צוות ב<strong>אתגר נול אדריכלים</strong>, <strong>קולקר־קולקר־אפשטיין</strong> ו<strong>דאובר אדריכלים</strong>. מרבית הפרויקטים המוצגים באתר תוכננו ונוהלו תחת אחריותו הישירה.</p>' +
             '<p>האדריכלות עבורנו היא שפה שמתרגמת צרכים עסקיים ופרקטיים לחוויה מרחבית, אנושית ומרגשת.</p>' +
           '</div>' +
