@@ -415,13 +415,6 @@
         '</section>' +
 
         trustedByHTML() +
-
-        '<section class="section section-divider" style="text-align:center;">' +
-          '<div class="container">' +
-            '<h2 class="h2" style="margin-bottom:16px;">מעוניינים לשמוע עוד?</h2>' +
-            '<a href="#/contact" class="btn">צרו קשר</a>' +
-          '</div>' +
-        '</section>' +
       '</div>'
     );
   }
