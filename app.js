@@ -738,7 +738,10 @@
 
     if (logo && logo.getBoundingClientRect().width > 0) {
       const lr = logo.getBoundingClientRect();
-      prev.style.right = Math.round(vw - lr.right - 22) + 'px';
+      // -19 rather than -22 (half the box width): the ">" glyph's actual tip
+      // sits a few px right of the box's visual center, so nudge the box left
+      // to bring the tip itself onto the target line.
+      prev.style.right = Math.round(vw - lr.right - 19) + 'px';
     } else {
       prev.style.right = '';
     }
