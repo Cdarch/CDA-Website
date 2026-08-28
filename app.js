@@ -580,6 +580,7 @@
     const grid = document.getElementById('proj-grid');
     const viewport = document.querySelector('.projects-viewport');
     if (!grid || !viewport) return;
+    if (window.innerWidth < 768) return; // mobile: natural 2-col scroll, no paginated frame
 
     const pageCount = Math.ceil(PROJECTS.length / PROJECTS_PAGE_SIZE);
     let page = 0;
