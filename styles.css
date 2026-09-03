@@ -142,7 +142,6 @@ body.hide-footer .site-footer { display: none; }
 }
 h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 .h1 { font-size: clamp(28px, 5vw, 56px); line-height: 1.15; }
-.h1-sm { font-size: clamp(20px, 2.6vw, 30px); line-height: 1.3; }
 .h2 { font-size: clamp(24px, 3.5vw, 40px); line-height: 1.2; font-weight: 300; }
 .h3 { font-size: clamp(18px, 2vw, 22px); font-weight: 500; letter-spacing: 0.02em; }
 .muted { color: var(--muted); }
@@ -434,12 +433,6 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 }
 @media (min-width: 768px) { .trusted-grid img { max-height: 64px; } }
 .trusted-grid img:hover { filter: grayscale(0); opacity: 1; }
-
-/* ===== About page ===== */
-.prose { max-width: 70ch; margin: 0 auto; }
-.prose p { font-size: clamp(14px, 1.3vw, 16px); line-height: 1.55; margin: 0 0 8px; }
-.prose strong { font-weight: 600; }
-.prose-divider { border-top: 1px solid var(--line); margin: 10px 0 8px; }
 
 /* ===== Project detail — content-height gallery with a peeking next image =====
    The frame is sized from the gallery column's own width via a fixed
