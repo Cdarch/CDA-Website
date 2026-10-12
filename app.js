@@ -693,7 +693,7 @@
     // be a blank band between the photo and the facts.
     const noPeek = function () { return count <= 1 && window.innerWidth < 768; };
     const gapPx = function () { return noPeek() ? 0 : (parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 48); };
-    const peekPx = function () { return noPeek() ? 0 : (window.innerWidth < 768 ? 72 : 30); };
+    const peekPx = function () { return noPeek() ? 0 : (window.innerWidth < 768 ? 36 : 30); };
 
     // Cap each frame's height to a share of the available viewport height —
     // otherwise a portrait photo stretched to the column's full width ends up

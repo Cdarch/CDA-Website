@@ -541,6 +541,14 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
   color: var(--muted);
   line-height: 1.7;
 }
+/* Mobile: tighter lines in the facts block (the little tick keeps to the middle
+   of the shorter line). */
+@media (max-width: 767px) {
+  .fc-title { margin-bottom: 14px; }
+  .facts-list li { line-height: 1.5; padding-block: 2px; }
+  .facts-list li::before { top: calc(2px + 0.35em); }
+  .note { margin-top: 16px; line-height: 1.5; }
+}
 
 .detail-nav {
   position: fixed;
@@ -674,6 +682,23 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 }
 .a11y-fab:hover { transform: scale(1.05); }
 
+/* Mobile: park the button in the bottom-left corner — the opposite side from the
+   right-aligned Hebrew text — smaller and faded; it comes to full strength when
+   touched or open. The panel opens from the same corner. */
+@media (max-width: 767px) {
+  .a11y-fab {
+    inset-inline-start: auto;
+    left: 10px;
+    bottom: 14px;
+    width: 38px;
+    height: 38px;
+    opacity: 0.55;
+    transition: opacity .2s, transform .2s;
+  }
+  .a11y-fab:hover { transform: none; }
+  .a11y-fab:active, .a11y-fab:focus-visible, .a11y-fab[aria-expanded="true"] { opacity: 1; }
+}
+
 .a11y-panel {
   position: fixed;
   bottom: 80px;
@@ -687,6 +712,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
   padding: 16px;
   z-index: 45;
   animation: fadeUp .35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (max-width: 767px) {
+  .a11y-panel { inset-inline-start: auto; left: 10px; bottom: 62px; }
 }
 .a11y-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .a11y-head h2 { font-size: 14px; font-weight: 500; letter-spacing: 0.05em; }
