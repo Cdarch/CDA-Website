@@ -83,10 +83,10 @@ window.PROJECTS = [
     area: '13,500 מ"ר',
     plotArea: '2,442 מ"ר',
     status: 'בתכנון',
-    cover: 'assets/projects/yehuda-hanasi-1.jpg',
+    cover: 'assets/projects/yehuda-hanasi-1.jpg?v=2',
     images: [
-      'assets/projects/yehuda-hanasi-1.jpg',
-      'assets/projects/yehuda-hanasi-2.jpg',
+      'assets/projects/yehuda-hanasi-1.jpg?v=2',
+      'assets/projects/yehuda-hanasi-2.jpg?v=2',
     ],
   },
   {
