@@ -283,7 +283,7 @@
         '<section class="hero-tagline-wrap">' +
           '<div class="container">' +
             '<div class="hero-tagline-inner">' +
-              '<h1 class="hero-tagline">אדריכלות שמשלבת אסתטיקה, פונקציונליות וחדשנות.</h1>' +
+              '<h1 class="hero-tagline">חזון אדריכלי. חשיבה מעמיקה. תכנון מדויק.</h1>' +
             '</div>' +
           '</div>' +
         '</section>' +
