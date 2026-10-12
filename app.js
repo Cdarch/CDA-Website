@@ -686,8 +686,14 @@
     const items = stack.querySelectorAll('.pgallery-item');
     if (items[0]) items[0].classList.add('is-current');
 
-    const GAP = 48; // must match .pgallery-stack's gap
-    const PEEK = 30; // actual pixels of the next image's top that should show
+    // Gap is read live from the stack's CSS (it differs on mobile); the peek is the
+    // actual pixels of the next image's top that should show (more on mobile, where
+    // 30px is only sky).
+    // A single-image project has nothing to peek at: on mobile that space would just
+    // be a blank band between the photo and the facts.
+    const noPeek = function () { return count <= 1 && window.innerWidth < 768; };
+    const gapPx = function () { return noPeek() ? 0 : (parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 48); };
+    const peekPx = function () { return noPeek() ? 0 : (window.innerWidth < 768 ? 72 : 30); };
 
     // Cap each frame's height to a share of the available viewport height —
     // otherwise a portrait photo stretched to the column's full width ends up
@@ -726,7 +732,7 @@
       const firstFrame = stack.querySelector('.image-frame');
       const fr = firstFrame ? firstFrame.getBoundingClientRect() : null;
       const frameH = (fr && fr.height) ? fr.height : 300;
-      viewport.style.height = Math.round(frameH + GAP + PEEK) + 'px';
+      viewport.style.height = Math.round(frameH + gapPx() + peekPx()) + 'px';
       positionDetailNav(); // the title's position follows this height
     }
     syncViewportHeight();

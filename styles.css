@@ -500,6 +500,13 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
   filter: grayscale(1) brightness(1.7) contrast(0.75);
   transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter .6s ease;
 }
+/* Mobile: the peeking next image is taller (see PEEK in app.js) and its black-and-white
+   tint is softer — at the desktop strength a bright sky/building top washes out to a
+   flat grey bar, so on a small screen nothing of the picture reads. */
+@media (max-width: 767px) {
+  .pgallery-stack { gap: 16px; } /* the JS reads this gap live */
+  .pgallery-item .image-frame img { filter: grayscale(1) brightness(1.1) contrast(0.9); }
+}
 .pgallery-item.is-current .image-frame img { filter: grayscale(0) brightness(1) contrast(1); }
 .pgallery-item .image-frame:hover img { transform: scale(1.03); }
 
