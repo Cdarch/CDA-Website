@@ -662,6 +662,7 @@
       const fr = firstFrame ? firstFrame.getBoundingClientRect() : null;
       const frameH = (fr && fr.height) ? fr.height : 300;
       viewport.style.height = Math.round(frameH + GAP + PEEK) + 'px';
+      positionDetailNav(); // the title's position follows this height
     }
     syncViewportHeight();
     window.addEventListener('resize', syncViewportHeight);
@@ -721,6 +722,24 @@
       prev.style.right = Math.round(vw - lr.right - 19) + 'px';
     } else {
       prev.style.right = '';
+    }
+
+    // Vertical: the arrows sit at a fixed 43% of the viewport (CSS), but on a page
+    // whose facts title is long/high (e.g. a multi-image project in a short window)
+    // that lands on top of the title. Only then, lift both arrows so they clear
+    // it by the same margin the other pages have; every other page is untouched.
+    next.style.top = prev.style.top = '';
+    const title = document.querySelector('.fc-title');
+    if (title && next.getBoundingClientRect().width > 0) {
+      const rg = document.createRange();
+      rg.selectNodeContents(title);
+      const titleTop = rg.getBoundingClientRect().top;
+      const nr = next.getBoundingClientRect();
+      const MIN_GAP = 12, TARGET_GAP = 24;
+      if (titleTop - nr.bottom < MIN_GAP) {
+        const top = Math.round(titleTop - TARGET_GAP - nr.height / 2) + 'px';
+        next.style.top = prev.style.top = top;
+      }
     }
   }
   window.addEventListener('resize', positionDetailNav);
