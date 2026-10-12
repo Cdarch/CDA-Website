@@ -689,11 +689,15 @@
     // Gap is read live from the stack's CSS (it differs on mobile); the peek is the
     // actual pixels of the next image's top that should show (more on mobile, where
     // 30px is only sky).
-    // A single-image project has nothing to peek at: on mobile that space would just
-    // be a blank band between the photo and the facts.
-    const noPeek = function () { return count <= 1 && window.innerWidth < 768; };
-    const gapPx = function () { return noPeek() ? 0 : (parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 48); };
-    const peekPx = function () { return noPeek() ? 0 : (window.innerWidth < 768 ? 36 : 30); };
+    // On mobile the band between the photo and the peek holds the project prev/next
+    // arrows (see positionDetailNav). A single-image project has nothing to peek at,
+    // but keeps an empty band of the same kind for the arrows.
+    const isMobile = function () { return window.innerWidth < 768; };
+    const gapPx = function () {
+      if (isMobile() && count <= 1) return 48;
+      return parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 48;
+    };
+    const peekPx = function () { return isMobile() ? (count <= 1 ? 0 : 36) : 30; };
 
     // Cap each frame's height to a share of the available viewport height —
     // otherwise a portrait photo stretched to the column's full width ends up
@@ -733,6 +737,9 @@
       const fr = firstFrame ? firstFrame.getBoundingClientRect() : null;
       const frameH = (fr && fr.height) ? fr.height : 300;
       viewport.style.height = Math.round(frameH + gapPx() + peekPx()) + 'px';
+      // positionDetailNav() places the mobile arrows in the band from these.
+      viewport.setAttribute('data-band', String(gapPx()));
+      viewport.setAttribute('data-peek', String(peekPx()));
       positionDetailNav(); // the title's position follows this height
     }
     syncViewportHeight();
@@ -758,15 +765,41 @@
       else if (e.deltaY < -10) goTo(index - 1);
     }, { passive: false });
 
-    let touchStartY = null;
+    let touchStartY = null, touchStartX = null;
     stack.addEventListener('touchstart', function (e) {
       touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
     }, { passive: true });
     stack.addEventListener('touchend', function (e) {
       if (touchStartY == null) return;
       const dy = touchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(dy) > 40) goTo(dy > 0 ? index + 1 : index - 1);
+      const dx = touchStartX - e.changedTouches[0].clientX;
       touchStartY = null;
+      if (Math.abs(dx) > Math.abs(dy)) return; // sideways swipe = next/previous project, not the gallery
+      if (Math.abs(dy) > 40) goTo(dy > 0 ? index + 1 : index - 1);
+    });
+  }
+
+  // Swipe sideways on a project page to move to the next/previous project, in the
+  // same order and direction as the arrows (swipe left = next, like the left arrow).
+  function initDetailSwipe() {
+    const page = document.querySelector('.detail-fixed');
+    if (!page) return;
+    const next = page.querySelector('.detail-nav-next');
+    const prev = page.querySelector('.detail-nav-prev');
+    if (!next || !prev) return;
+    let x0 = null, y0 = null;
+    page.addEventListener('touchstart', function (e) {
+      x0 = e.touches[0].clientX;
+      y0 = e.touches[0].clientY;
+    }, { passive: true });
+    page.addEventListener('touchend', function (e) {
+      if (x0 == null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      const dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      location.hash = (dx < 0 ? next : prev).getAttribute('href');
     });
   }
 
@@ -775,6 +808,23 @@
     const prev = document.querySelector('.detail-nav-prev');
     if (!next || !prev) return;
     const vw = window.innerWidth;
+
+    // Mobile: the arrows sit in the empty band between the photo and the peeking
+    // next image, centred in it (band/peek are recorded on the gallery viewport).
+    // Absolutely positioned, so they scroll with the page.
+    if (vw < 768) {
+      const vp = document.querySelector('.pgallery-viewport');
+      const box = document.querySelector('.detail-fixed');
+      if (vp && box) {
+        const band = parseFloat(vp.getAttribute('data-band')) || 0;
+        const peek = parseFloat(vp.getAttribute('data-peek')) || 0;
+        const centerY = vp.getBoundingClientRect().bottom - peek - band / 2;
+        const top = Math.round(centerY - next.offsetHeight / 2 - box.getBoundingClientRect().top);
+        next.style.top = prev.style.top = top + 'px';
+      }
+      next.style.left = prev.style.right = '';
+      return;
+    }
     const about = document.querySelector('.nav-desktop a[data-route="/about"]');
     const logo = document.querySelector('.brand-logo');
 
@@ -821,6 +871,7 @@
     initProjectsPager();
     initDetailGalleryPager();
     initContactForm();
+    initDetailSwipe();
     positionDetailNav();
     // Re-measure a beat later too — a transient 0-width read (e.g. mid-reflow
     // right after a resize) shouldn't permanently stick as the fallback.

@@ -504,7 +504,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
    tint is softer — at the desktop strength a bright sky/building top washes out to a
    flat grey bar, so on a small screen nothing of the picture reads. */
 @media (max-width: 767px) {
-  .pgallery-stack { gap: 16px; } /* the JS reads this gap live */
+  .pgallery-stack { gap: 56px; } /* room for the arrows; the JS reads this gap live */
+  .detail-grid { gap: 20px; }
   .pgallery-item .image-frame img { filter: grayscale(1) brightness(1.1) contrast(0.9); }
 }
 .pgallery-item.is-current .image-frame img { filter: grayscale(0) brightness(1) contrast(1); }
@@ -567,6 +568,15 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 .detail-nav-next { left: 16px; }
 .detail-nav-prev { right: 16px; }
 @media (min-width: 768px) { .detail-nav-next { left: 28px; } .detail-nav-prev { right: 28px; } }
+
+/* Mobile: the arrows live in the empty band between the photo and the peeking
+   next image (top is set in JS), dark enough to see, scrolling with the page. */
+@media (max-width: 767px) {
+  .detail-fixed { position: relative; }
+  .detail-nav { position: absolute; transform: none; width: 40px; height: 40px; color: var(--ink); }
+  .detail-nav-next { left: 8px; }
+  .detail-nav-prev { right: 8px; }
+}
 
 /* ===== Contact ===== */
 /* Contact details row and the form below share the same container, so their
