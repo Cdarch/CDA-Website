@@ -405,11 +405,11 @@
   }
 
   // Contact form delivery goes through Web3Forms (the site is static, so there is
-  // no server of its own to send mail). Paste the access key that Web3Forms emails
-  // to CONTACT_EMAIL here; until then the form falls back to opening the visitor's
-  // mail app. The key is meant to be public — it only allows sending to that inbox.
-  const CONTACT_EMAIL = 'chaim@cdarc.co.il';
-  const WEB3FORMS_KEY = '';
+  // no server of its own to send mail). WEB3FORMS_KEY is the access key Web3Forms
+  // emailed to CONTACT_EMAIL; it's meant to be public — it only allows sending to
+  // that inbox. If it's ever blank, the form falls back to opening the visitor's mail app.
+  const CONTACT_EMAIL = 'Chaim@CDArc.co.il';
+  const WEB3FORMS_KEY = 'dc82ae4c-4336-4e93-990d-c9e2ed99b505';
   const CONTACT_SUBJECT = 'פנייה מאתר א.ח.ד אדריכלים';
 
   function pageContact() {
@@ -417,10 +417,8 @@
       '<div class="fade-in">' +
         '<section class="container" style="padding-top:56px; padding-bottom:80px;">' +
           '<h1 class="h1">בואו נדבר</h1>' +
-          '<p class="lede" style="margin-top:20px;">לכל פנייה — ייעוץ ראשוני, תיאום פגישה או שיתוף פעולה — אפשר ליצור קשר בכל אחד מהערוצים.</p>' +
-
           '<div class="cx-row">' +
-            '<a class="cx-box cx-email" href="mailto:' + CONTACT_EMAIL + '"><span class="cx-label">דוא״ל</span><span class="cx-val">chaim@<b>cdarc</b>.co.il</span></a>' +
+            '<a class="cx-box cx-email" href="mailto:' + CONTACT_EMAIL + '"><span class="cx-label">דוא״ל</span><span class="cx-val"><span>Chaim@<b>CDArc</b>.co.il</span></span></a>' +
             '<a class="cx-box" href="tel:+972503898979"><span class="cx-label">טלפון</span><span class="cx-val">050-3898979</span></a>' +
             '<a class="cx-box" href="https://wa.me/972503898979" target="_blank" rel="noopener noreferrer"><span class="cx-label">ווטסאפ</span><span class="cx-val">שליחת הודעה</span></a>' +
           '</div>' +
