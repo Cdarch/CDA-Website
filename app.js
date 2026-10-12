@@ -329,8 +329,6 @@
       return '<li>' + escapeHtml(kv[0]) + ': ' + escapeHtml(kv[1]) + '</li>';
     }).join('');
 
-    const metaLine = [p.type, p.status || 'בתכנון'].filter(Boolean).join(' · ');
-
     function balanceNumerals(str) {
       return escapeHtml(str).replace(/[0-9]+(?:-[0-9]+)?/g, function (m) {
         return '<span class="fc-num">' + m + '</span>';
@@ -353,7 +351,7 @@
 
     // No note field at all -> show the default credit line. An explicit empty
     // string ('') means "deliberately no note" (used by the newer projects).
-    const noteText = p.note === undefined ? 'תוכנן והוגש תחת אתגר נול אדריכלים' : p.note;
+    const noteText = p.note === undefined ? 'במסגרת עבודתי באתגר נול אדריכלים' : p.note;
     const note = noteText ? '<p class="note">* ' + escapeHtml(noteText) + '</p>' : '';
 
     // Prev/next follow the same order as the projects grid (RTL reading order:
@@ -380,7 +378,6 @@
             '</div>' +
             '<aside><div class="facts-card">' +
               '<h2 class="fc-title">' + titleLine + '</h2>' +
-              (metaLine ? '<p class="fc-meta">' + escapeHtml(metaLine) + '</p>' : '') +
               '<ul class="facts-list">' + factsHTML + '</ul>' +
               note +
             '</div></aside>' +
