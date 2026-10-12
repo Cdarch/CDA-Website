@@ -404,42 +404,109 @@
     );
   }
 
+  // Contact form delivery goes through Web3Forms (the site is static, so there is
+  // no server of its own to send mail). Paste the access key that Web3Forms emails
+  // to CONTACT_EMAIL here; until then the form falls back to opening the visitor's
+  // mail app. The key is meant to be public — it only allows sending to that inbox.
+  const CONTACT_EMAIL = 'chaim@cdarc.co.il';
+  const WEB3FORMS_KEY = '';
+  const CONTACT_SUBJECT = 'פנייה מאתר א.ח.ד אדריכלים';
+
   function pageContact() {
-    const subject = encodeURIComponent('פנייה מאתר א.ח.ד אדריכלים');
     return (
       '<div class="fade-in">' +
-        '<section class="container" style="padding:56px 0 32px;">' +
-          '<p class="eyebrow">צור קשר</p>' +
-          '<h1 class="h1">בואו נדבר.</h1>' +
-          '<p class="lede" style="margin-top:20px;">לכל פנייה — ייעוץ ראשוני, תיאום פגישה, שיתוף פעולה או בקשת הצעת מחיר — ניתן ליצור איתנו קשר בערוצים הבאים.</p>' +
-        '</section>' +
+        '<section class="container" style="padding-top:56px; padding-bottom:80px;">' +
+          '<h1 class="h1">בואו נדבר</h1>' +
+          '<p class="lede" style="margin-top:20px;">לכל פנייה — ייעוץ ראשוני, תיאום פגישה או שיתוף פעולה — אפשר ליצור קשר בכל אחד מהערוצים.</p>' +
 
-        '<section class="container" style="padding-bottom:80px;">' +
-          '<div class="contact-grid">' +
-            '<div>' +
-              '<div class="contact-item"><p class="label">דוא״ל</p>' +
-                '<a href="mailto:chaim.david.arc@gmail.com?subject=' + subject + '" dir="ltr">chaim.david.arc@gmail.com</a>' +
-              '</div>' +
-              '<div class="contact-item"><p class="label">טלפון</p>' +
-                '<a href="tel:+972503898979" dir="ltr">+972 50 389 89 79</a>' +
-              '</div>' +
-              '<div class="contact-item"><p class="label">WhatsApp</p>' +
-                '<a href="https://wa.me/972503898979" target="_blank" rel="noopener noreferrer">שליחת הודעה</a>' +
-              '</div>' +
-            '</div>' +
-            '<form class="form" action="mailto:chaim.david.arc@gmail.com?subject=' + subject + '" method="post" enctype="text/plain" aria-label="טופס יצירת קשר">' +
-              '<h2>שלחו הודעה</h2>' +
-              '<div class="field"><label for="f-name">שם מלא *</label><input id="f-name" name="name" type="text" required /></div>' +
-              '<div class="field"><label for="f-phone">טלפון</label><input id="f-phone" name="phone" type="tel" inputmode="tel" /></div>' +
-              '<div class="field"><label for="f-email">דוא״ל</label><input id="f-email" name="email" type="email" /></div>' +
-              '<div class="field"><label for="f-msg">הודעה *</label><textarea id="f-msg" name="message" rows="5" required></textarea></div>' +
-              '<button type="submit" class="btn" style="width:100%;">שליחה</button>' +
-              '<p class="form-note">ההודעה תיפתח בתוכנת הדוא״ל המוגדרת במכשיר שלכם. ניתן גם לפנות ישירות לכתובת המייל למעלה.</p>' +
-            '</form>' +
+          '<div class="cx-row">' +
+            '<a class="cx-box cx-email" href="mailto:' + CONTACT_EMAIL + '"><span class="cx-label">דוא״ל</span><span class="cx-val">chaim@<b>cdarc</b>.co.il</span></a>' +
+            '<a class="cx-box" href="tel:+972503898979"><span class="cx-label">טלפון</span><span class="cx-val">050-3898979</span></a>' +
+            '<a class="cx-box" href="https://wa.me/972503898979" target="_blank" rel="noopener noreferrer"><span class="cx-label">ווטסאפ</span><span class="cx-val">שליחת הודעה</span></a>' +
           '</div>' +
+
+          '<form class="cx-form" id="contact-form" novalidate aria-label="טופס יצירת קשר">' +
+            '<h2 class="cx-form-h">שלחו הודעה</h2>' +
+            '<div class="cx-g2">' +
+              '<div class="field"><label for="cf-name">שם מלא *</label><input id="cf-name" name="name" type="text" autocomplete="name" required /><p class="cx-err" role="alert">נא למלא שם</p></div>' +
+              '<div class="field"><label for="cf-contact">טלפון או דוא״ל *</label><input id="cf-contact" name="contact" type="text" autocomplete="off" required /><p class="cx-err" role="alert">נא למלא דרך לחזור אליכם</p></div>' +
+            '</div>' +
+            '<div class="field"><label for="cf-msg">הודעה *</label><textarea id="cf-msg" name="message" rows="5" required></textarea><p class="cx-err" role="alert">נא לכתוב הודעה</p></div>' +
+            '<input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" />' +
+            '<button type="submit" class="btn cx-send">שליחה</button>' +
+            '<p class="cx-status" id="cx-status" role="status"></p>' +
+            '<p class="form-note" style="text-align:center;">ההודעה נשלחת ישירות אליי, ואחזור אליכם בהקדם.</p>' +
+          '</form>' +
+          '<div class="cx-ok" id="cx-ok" hidden><p class="cx-ok-h">ההודעה נשלחה</p><p class="muted">תודה, אחזור אליכם בהקדם.</p></div>' +
         '</section>' +
       '</div>'
     );
+  }
+
+  function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    const ok = document.getElementById('cx-ok');
+    const status = document.getElementById('cx-status');
+    const send = form.querySelector('.cx-send');
+    const fields = ['cf-name', 'cf-contact', 'cf-msg'].map(function (id) { return document.getElementById(id); });
+
+    function check(input) {
+      const bad = !input.value.trim();
+      input.classList.toggle('is-invalid', bad);
+      input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+      input.parentNode.querySelector('.cx-err').style.display = bad ? 'block' : 'none';
+      return !bad;
+    }
+    fields.forEach(function (input) { input.addEventListener('input', function () { check(input); }); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const results = fields.map(check); // check all, so every empty field shows its message
+      if (results.indexOf(false) !== -1) {
+        fields[results.indexOf(false)].focus();
+        return;
+      }
+      const name = fields[0].value.trim();
+      const contact = fields[1].value.trim();
+      const message = fields[2].value.trim();
+      status.textContent = '';
+
+      if (!WEB3FORMS_KEY) {
+        location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(CONTACT_SUBJECT) +
+          '&body=' + encodeURIComponent(message + '\n\n' + name + '\n' + contact);
+        return;
+      }
+
+      const payload = {
+        access_key: WEB3FORMS_KEY,
+        subject: CONTACT_SUBJECT,
+        from_name: name,
+        name: name,
+        contact: contact,
+        message: message + '\n\nדרך חזרה: ' + contact,
+        botcheck: form.elements.botcheck.checked ? 'on' : ''
+      };
+      if (/^\S+@\S+\.\S+$/.test(contact)) payload.email = contact; // lets "reply" go to the sender
+
+      send.disabled = true;
+      send.textContent = 'שולח…';
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (r) { return r.json(); }).then(function (data) {
+        if (!data.success) throw new Error(data.message || 'send failed');
+        form.reset();
+        form.hidden = true;
+        ok.hidden = false;
+      }).catch(function () {
+        status.textContent = 'לא הצלחנו לשלוח את ההודעה. אפשר לנסות שוב, או לפנות ישירות ל-' + CONTACT_EMAIL + '.';
+      }).then(function () {
+        send.disabled = false;
+        send.textContent = 'שליחה';
+      });
+    });
   }
 
   // ---------- router ----------
@@ -749,6 +816,7 @@
     initHeroCarousel();
     initProjectsPager();
     initDetailGalleryPager();
+    initContactForm();
     positionDetailNav();
     // Re-measure a beat later too — a transient 0-width read (e.g. mid-reflow
     // right after a resize) shouldn't permanently stick as the fallback.
