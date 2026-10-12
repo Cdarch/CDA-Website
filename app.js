@@ -753,6 +753,8 @@
     // Re-measure a beat later too — a transient 0-width read (e.g. mid-reflow
     // right after a resize) shouldn't permanently stick as the fallback.
     setTimeout(positionDetailNav, 100);
+    // Web fonts can change the facts column's height after first paint.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(positionDetailNav);
 
     // Project cards (cover image opens lightbox of all images of that project)
     main.querySelectorAll('[data-open-project]').forEach(function (btn) {
