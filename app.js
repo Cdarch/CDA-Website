@@ -352,7 +352,7 @@
     // No note field at all -> show the default credit line. An explicit empty
     // string ('') means "deliberately no note" (used by the newer projects).
     const noteText = p.note === undefined ? 'במסגרת עבודתי באתגר נול אדריכלים' : p.note;
-    const note = noteText ? '<p class="note">* ' + escapeHtml(noteText) + '</p>' : '';
+    const note = noteText ? '<p class="note">' + escapeHtml(noteText) + '</p>' : '';
 
     // Prev/next follow the same order as the projects grid (RTL reading order:
     // forward = left). Wraps around at either end.
