@@ -418,7 +418,7 @@
         '<section class="container" style="padding-top:56px; padding-bottom:80px;">' +
           '<h1 class="h1">בואו נדבר</h1>' +
           '<div class="cx-row">' +
-            '<a class="cx-box cx-email" href="mailto:' + CONTACT_EMAIL + '"><span class="cx-label">דוא״ל</span><span class="cx-val"><span>Chaim@<b>CDArc</b>.co.il</span></span></a>' +
+            '<a class="cx-box cx-email" href="mailto:' + CONTACT_EMAIL + '"><span class="cx-label">דוא״ל</span><span class="cx-val"><span>Chaim@CDArc.co.il</span></span></a>' +
             '<a class="cx-box" href="tel:+972503898979"><span class="cx-label">טלפון</span><span class="cx-val">050-3898979</span></a>' +
             '<a class="cx-box" href="https://wa.me/972503898979" target="_blank" rel="noopener noreferrer"><span class="cx-label">ווטסאפ</span><span class="cx-val">שליחת הודעה</span></a>' +
           '</div>' +
