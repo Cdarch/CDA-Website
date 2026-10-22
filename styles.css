@@ -210,7 +210,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
   -ms-overflow-style: none;
   cursor: grab;
   touch-action: pan-y;
+  overscroll-behavior-x: contain;
+  -webkit-user-select: none;
+  user-select: none;
 }
+.hero-carousel img { -webkit-user-drag: none; }
 .hero-carousel::-webkit-scrollbar { display: none; }
 .hero-carousel:active { cursor: grabbing; }
 .hero-carousel .project-card {

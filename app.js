@@ -568,11 +568,30 @@
 
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const SPEED = 0.55; // px per frame — steady rightward drift
+    const DRAG_THRESHOLD = 6; // px of movement before a press counts as a drag, not a tap
     let paused = false;
-    let dragging = false, startX = 0, startScroll = 0;
+    let dragging = false, pressed = false, moved = false;
+    let startX = 0, startPos = 0, lastX = 0, lastT = 0;
+    let vel = 0; // px per frame left over from a flick; decays to zero, then the drift resumes
     let pos = 0; // tracked scroll position; avoids reading scrollLeft back every frame
-    let half = car.scrollWidth / 2;
-    window.addEventListener('resize', function () { half = car.scrollWidth / 2; });
+
+    // The cards are listed twice, so the strip repeats every `period` px (one full set
+    // of cards plus its gaps — measured between matching cards, not scrollWidth/2,
+    // which is off by one gap). Every change to `pos` is wrapped into (-period, 0]
+    // so it can be dragged either way without ever reaching an end of the strip.
+    const cards = car.querySelectorAll('.project-card');
+    let period = 0;
+    function measure() {
+      const n = cards.length / 2;
+      if (n >= 1) period = Math.abs(cards[n].getBoundingClientRect().left - cards[0].getBoundingClientRect().left);
+    }
+    function wrap(p) {
+      if (!period) return p;
+      p = p % period;
+      return p > 0 ? p - period : p;
+    }
+    measure();
+    window.addEventListener('resize', measure);
 
     // Projects mix portrait and landscape photos — a fixed 4:3 frame cropped
     // portrait ones badly. Give each card its own ratio from its own image
@@ -583,7 +602,7 @@
       function applyRatio() {
         if (img.naturalWidth && img.naturalHeight) {
           frame.style.aspectRatio = img.naturalWidth + ' / ' + img.naturalHeight;
-          half = car.scrollWidth / 2;
+          measure();
         }
       }
       if (img.complete) applyRatio();
@@ -591,40 +610,74 @@
     });
 
     function step() {
-      if (!paused && !dragging) {
-        pos -= SPEED;
-        if (Math.abs(pos) >= half) pos += half;
+      if (!dragging) {
+        if (Math.abs(vel) > 0.05) {
+          pos += vel;
+          vel *= 0.94;
+        } else {
+          vel = 0;
+          if (!paused) pos -= SPEED;
+        }
+        pos = wrap(pos);
         car.scrollLeft = pos;
       }
       requestAnimationFrame(step);
     }
     if (!reduceMotion) requestAnimationFrame(step);
 
-    car.addEventListener('pointerenter', function () { paused = true; });
-    car.addEventListener('pointerleave', function () { paused = false; });
+    car.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') paused = true; });
+    car.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') paused = false; });
 
     car.addEventListener('wheel', function (e) {
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         e.preventDefault();
-        pos -= e.deltaY;
+        pos = wrap(pos - e.deltaY);
         car.scrollLeft = pos;
       }
     }, { passive: false });
 
+    // Drag (mouse or finger): the strip follows the pointer in both directions and
+    // loops; letting go with speed carries on for a moment, then the drift resumes.
+    // Pointer capture only starts once the press has actually moved, so a plain tap
+    // still reaches the card underneath (opens the lightbox).
     car.addEventListener('pointerdown', function (e) {
-      dragging = true;
-      startX = e.clientX;
-      startScroll = pos;
-      car.setPointerCapture(e.pointerId);
+      pressed = true;
+      moved = false;
+      startX = lastX = e.clientX;
+      startPos = pos;
+      lastT = performance.now();
+      vel = 0;
     });
     car.addEventListener('pointermove', function (e) {
-      if (!dragging) return;
-      pos = startScroll + (e.clientX - startX);
+      if (!pressed) return;
+      const dx = e.clientX - startX;
+      if (!dragging) {
+        if (Math.abs(dx) < DRAG_THRESHOLD) return;
+        dragging = true;
+        moved = true;
+        try { car.setPointerCapture(e.pointerId); } catch (err) { /* pointer already gone */ }
+      }
+      // The strip is right-to-left: it moves with the finger when `pos` falls as the
+      // finger goes right.
+      pos = wrap(startPos - dx);
       car.scrollLeft = pos;
+      const now = performance.now();
+      const dt = now - lastT;
+      if (dt > 0) vel = 0.7 * vel + 0.3 * (-(e.clientX - lastX) / dt * 16.7);
+      lastX = e.clientX;
+      lastT = now;
     });
-    ['pointerup', 'pointercancel'].forEach(function (ev) {
-      car.addEventListener(ev, function () { dragging = false; });
-    });
+    function release() {
+      pressed = false;
+      if (dragging && performance.now() - lastT > 80) vel = 0; // held still before letting go
+      dragging = false;
+    }
+    car.addEventListener('pointerup', release);
+    car.addEventListener('pointercancel', release);
+    // A drag must not end in a click on whatever card is under the finger.
+    car.addEventListener('click', function (e) {
+      if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+    }, true);
   }
 
   function initProjectsPager() {
