@@ -225,6 +225,21 @@ h1, h2, h3, h4 { margin: 0; font-weight: 300; letter-spacing: -0.01em; }
 .project-card-bare .image-frame { cursor: pointer; }
 @media (min-width: 640px) { .hero-carousel .project-card { width: 48%; } }
 
+/* Mobile: every photo gets the same height (like desktop), and its width follows its
+   own proportions, so a row of mixed portrait/landscape pictures lines up top and
+   bottom with nothing cropped. A very wide picture is capped at 1.5 screens
+   (object-fit: cover trims only the excess — at 40vh the widest project is ~5% over). */
+@media (max-width: 767px) {
+  .hero-carousel { height: clamp(200px, 40vh, 440px); gap: 12px; }
+  .hero-carousel .project-card { width: auto; height: 100%; }
+  .hero-carousel .project-card .image-frame {
+    width: auto;
+    height: 100%;
+    max-width: 150vw;
+    aspect-ratio: 4 / 3; /* fallback until JS sets it per-image */
+  }
+}
+
 /* Desktop: size cards from a fixed share of viewport height, not a fixed width —
    leaves equal breathing room above/below (handled by space-evenly on .home-onescreen) */
 @media (min-width: 768px) {
