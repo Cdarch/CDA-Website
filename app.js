@@ -189,6 +189,18 @@
     setA11yPanel(open);
   });
   a11yClose.addEventListener('click', function () { setA11yPanel(false); });
+  // Escape or a tap outside the panel closes it
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !a11yPanel.hasAttribute('hidden')) {
+      setA11yPanel(false);
+      a11yToggle.focus();
+    }
+  });
+  document.addEventListener('click', function (e) {
+    if (a11yPanel.hasAttribute('hidden')) return;
+    if (a11yPanel.contains(e.target) || a11yToggle.contains(e.target)) return;
+    setA11yPanel(false);
+  });
   a11yReset.addEventListener('click', function () {
     a11y = Object.assign({}, a11yDefaults);
     applyA11y();
@@ -616,14 +628,16 @@
           vel *= 0.94;
         } else {
           vel = 0;
-          if (!paused) pos -= SPEED;
+          // no self-drift if the visitor asked for less motion (OS setting or our own
+          // accessibility panel); dragging still works
+          if (!paused && !reduceMotion && !document.body.classList.contains('reduce-motion')) pos -= SPEED;
         }
         pos = wrap(pos);
         car.scrollLeft = pos;
       }
       requestAnimationFrame(step);
     }
-    if (!reduceMotion) requestAnimationFrame(step);
+    requestAnimationFrame(step);
 
     car.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') paused = true; });
     car.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') paused = false; });
