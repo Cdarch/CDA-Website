@@ -141,6 +141,7 @@
   // ---------- accessibility menu ----------
   const A11Y_KEY = 'ahd_a11y_v1';
   const a11yDefaults = {
+    contrastHigh: false,
     textSize: 'normal',
     underlineLinks: false,
     reduceMotion: false,
@@ -148,6 +149,9 @@
   let a11y = Object.assign({}, a11yDefaults);
 
   function applyA11y() {
+    // on <html> too: the page colours (--bg etc.) are read from there
+    document.documentElement.classList.toggle('contrast-high', a11y.contrastHigh);
+    document.body.classList.toggle('contrast-high', a11y.contrastHigh);
     document.body.classList.toggle('text-larger', a11y.textSize === 'larger');
     document.body.classList.toggle('text-largest', a11y.textSize === 'largest');
     document.body.classList.toggle('links-underlined', a11y.underlineLinks);
