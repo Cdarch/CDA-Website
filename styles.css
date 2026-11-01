@@ -32,6 +32,11 @@ button:focus-visible, a:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
+/* No ring around photo cards: it stayed on a card after opening it and closing the
+   enlarged view with Esc (the browser treats that as keyboard focus), drawing a black
+   rectangle around the photo. Keyboard focus is still shown — the photo zooms in
+   slightly, same as on hover (see .image-frame:focus img). */
+.image-frame:focus-visible { outline: none; }
 
 .container { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
 @media (min-width: 768px) { .container { padding: 0 40px; } }
